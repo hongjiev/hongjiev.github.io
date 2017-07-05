@@ -93,16 +93,16 @@
 
 
 
-<meta name="description" content="在并发编程中，我们经常会用到volatile和synchronized这两个关键字，大家可能都了解synchronized，它是基于监视器锁实现的，monitorenter和monitorexit的成对出现实现了获取锁和释放锁的过程。 😂😂😂写一篇文章真的需要花很多心思好好写，待我慢慢写吧。。。">
+<meta name="description" content="不知道有没有人关注这篇文章。非常抱歉，由于为了写《解读 Java8 编程语言规范：Threads-And-Locks》我花了半个多月的时间，所以这篇又得延后了。。。本来想先删掉的，还是算了吧 在并发编程中，我们经常会用到volatile和synchronized这两个关键字，大家可能都了解synchronized，它是基于监视器锁实现的，monitorenter和monitorexit的成对出现实">
 <meta property="og:type" content="article">
 <meta property="og:title" content="预告：volatile和synchronized那些事">
 <meta property="og:url" content="http://yoursite.com/2017/06/16/Volatile-Synchronized-JMM-md/index.html">
 <meta property="og:site_name" content="Java熊">
-<meta property="og:description" content="在并发编程中，我们经常会用到volatile和synchronized这两个关键字，大家可能都了解synchronized，它是基于监视器锁实现的，monitorenter和monitorexit的成对出现实现了获取锁和释放锁的过程。 😂😂😂写一篇文章真的需要花很多心思好好写，待我慢慢写吧。。。">
-<meta property="og:updated_time" content="2017-06-16T14:15:55.000Z">
+<meta property="og:description" content="不知道有没有人关注这篇文章。非常抱歉，由于为了写《解读 Java8 编程语言规范：Threads-And-Locks》我花了半个多月的时间，所以这篇又得延后了。。。本来想先删掉的，还是算了吧 在并发编程中，我们经常会用到volatile和synchronized这两个关键字，大家可能都了解synchronized，它是基于监视器锁实现的，monitorenter和monitorexit的成对出现实">
+<meta property="og:updated_time" content="2017-07-05T13:35:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="预告：volatile和synchronized那些事">
-<meta name="twitter:description" content="在并发编程中，我们经常会用到volatile和synchronized这两个关键字，大家可能都了解synchronized，它是基于监视器锁实现的，monitorenter和monitorexit的成对出现实现了获取锁和释放锁的过程。 😂😂😂写一篇文章真的需要花很多心思好好写，待我慢慢写吧。。。">
+<meta name="twitter:description" content="不知道有没有人关注这篇文章。非常抱歉，由于为了写《解读 Java8 编程语言规范：Threads-And-Locks》我花了半个多月的时间，所以这篇又得延后了。。。本来想先删掉的，还是算了吧 在并发编程中，我们经常会用到volatile和synchronized这两个关键字，大家可能都了解synchronized，它是基于监视器锁实现的，monitorenter和monitorexit的成对出现实">
 
 
 
@@ -281,7 +281,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hong Jie">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -362,7 +362,8 @@
       
 
       
-        <p>在并发编程中，我们经常会用到volatile和synchronized这两个关键字，大家可能都了解synchronized，它是基于监视器锁实现的，monitorenter和monitorexit的成对出现实现了获取锁和释放锁的过程。</p>
+        <p><span style="color: red">不知道有没有人关注这篇文章。非常抱歉，由于为了写《解读 Java8 编程语言规范：Threads-And-Locks》我花了半个多月的时间，所以这篇又得延后了。。。本来想先删掉的，还是算了吧</span></p>
+<p>在并发编程中，我们经常会用到volatile和synchronized这两个关键字，大家可能都了解synchronized，它是基于监视器锁实现的，monitorenter和monitorexit的成对出现实现了获取锁和释放锁的过程。</p>
 <p>😂😂😂写一篇文章真的需要花很多心思好好写，待我慢慢写吧。。。</p>
 
       
@@ -409,6 +410,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/05/Threads-And-Locks-md/" rel="prev" title="解读 Java8 编程语言规范：Threads-And-Locks">
+                解读 Java8 编程语言规范：Threads-And-Locks <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -459,7 +464,7 @@
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
+               src="/images/avatar.jpg"
                alt="Hong Jie" />
           <p class="site-author-name" itemprop="name">Hong Jie</p>
            
@@ -471,7 +476,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -482,12 +487,21 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
           
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>

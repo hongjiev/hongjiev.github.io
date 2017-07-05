@@ -287,7 +287,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hong Jie">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -385,7 +385,7 @@
 <li>你需要提前知道什么是CAS(CompareAndSet)</li>
 </ol>
 <p>废话结束，开始。</p>
-<h2 id="AQS结构"><a href="#AQS结构" class="headerlink" title="AQS结构"></a>AQS结构</h2><p>先来看看AQS有哪些属性，搞清楚这些基本就知道AQS是什么套路了，毕竟可以猜嘛！</p>
+<h2 id="aqs结构"><a href="#AQS结构" class="headerlink" title="AQS结构"></a>AQS结构</h2><p>先来看看AQS有哪些属性，搞清楚这些基本就知道AQS是什么套路了，毕竟可以猜嘛！</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 头结点，你直接把它当做 当前持有锁的线程 可能是最好理解的</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Node head;</div><div class="line"><span class="comment">// 阻塞的尾节点，每个新的节点进来，都插入到最后，也就形成了一个隐视的链表</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Node tail;</div><div class="line"><span class="comment">// 这个是最重要的，不过也是最简单的，代表当前锁的状态，0代表没有被占用，大于0代表有线程持有当前锁</span></div><div class="line"><span class="comment">// 之所以说大于0，而不是等于1，是因为锁可以重入嘛，每次重入都加上1</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> state;</div><div class="line"><span class="comment">// 代表当前持有独占锁的线程，举个最重要的使用例子，因为锁可以重入</span></div><div class="line"><span class="comment">// reentrantLock.lock()可以嵌套调用多次，所以每次用这个来判断当前线程是否已经拥有了锁</span></div><div class="line"><span class="comment">// if (currentThread == getExclusiveOwnerThread()) &#123;state++&#125;</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">transient</span> Thread exclusiveOwnerThread; <span class="comment">//继承自AbstractOwnableSynchronizer</span></div></pre></td></tr></table></figure>
 <p>怎么样，看样子应该是很简单的吧，毕竟也就四个属性啊。</p>
 <p>AbstractQueuedSynchronizer的等待队列示意如下所示，注意了，之后分析过程中所说的queue，也就是阻塞队列不包含head，不包含head，不包含head。</p>
@@ -539,7 +539,7 @@
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
+               src="/images/avatar.jpg"
                alt="Hong Jie" />
           <p class="site-author-name" itemprop="name">Hong Jie</p>
            
@@ -551,7 +551,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -562,12 +562,21 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
           
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>
@@ -599,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AQS结构"><span class="nav-number">1.</span> <span class="nav-text">AQS结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程抢锁"><span class="nav-number">2.</span> <span class="nav-text">线程抢锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解锁操作"><span class="nav-number">3.</span> <span class="nav-text">解锁操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例图解析"><span class="nav-number">5.</span> <span class="nav-text">示例图解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广告无罪"><span class="nav-number">6.</span> <span class="nav-text">广告无罪</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#aqs结构"><span class="nav-number">1.</span> <span class="nav-text">AQS结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程抢锁"><span class="nav-number">2.</span> <span class="nav-text">线程抢锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解锁操作"><span class="nav-number">3.</span> <span class="nav-text">解锁操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例图解析"><span class="nav-number">5.</span> <span class="nav-text">示例图解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广告无罪"><span class="nav-number">6.</span> <span class="nav-text">广告无罪</span></a></li></ol></div>
             
 
           </div>
