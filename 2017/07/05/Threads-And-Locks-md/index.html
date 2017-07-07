@@ -93,17 +93,17 @@
 
 
 
-<meta name="description" content="在java并发编程中，线程和锁永远是最重要的概念。相信这篇文章还是可以给很多读者提供学习参考的。 本文主要是翻译加上解释Oracle《Java 8编程语言规范》的第17章《Threads and Locks》，原文大概30页pdf，我加入了很多自己的理解，希望能帮大家把规范看懂，并且从中得到很多你一直想要知道但是还不知道的知识。 现在京东和当当已经有售《Java语言规范：基于Java SE 8》这">
+<meta name="description" content="在java并发编程中，线程和锁永远是最重要的概念。相信这篇文章还是可以给很多读者提供学习参考的。 本文主要是翻译 + 解释 Oracle《The Java Language Specification, Java SE 8 Edition》的第17章《Threads and Locks》，原文大概30页pdf，我加入了很多自己的理解，希望能帮大家把规范看懂，并且从中得到很多你一直想要知道但是还不知">
 <meta property="og:type" content="article">
 <meta property="og:title" content="解读 Java8 编程语言规范：Threads-And-Locks">
 <meta property="og:url" content="http://yoursite.com/2017/07/05/Threads-And-Locks-md/index.html">
 <meta property="og:site_name" content="Java熊">
-<meta property="og:description" content="在java并发编程中，线程和锁永远是最重要的概念。相信这篇文章还是可以给很多读者提供学习参考的。 本文主要是翻译加上解释Oracle《Java 8编程语言规范》的第17章《Threads and Locks》，原文大概30页pdf，我加入了很多自己的理解，希望能帮大家把规范看懂，并且从中得到很多你一直想要知道但是还不知道的知识。 现在京东和当当已经有售《Java语言规范：基于Java SE 8》这">
+<meta property="og:description" content="在java并发编程中，线程和锁永远是最重要的概念。相信这篇文章还是可以给很多读者提供学习参考的。 本文主要是翻译 + 解释 Oracle《The Java Language Specification, Java SE 8 Edition》的第17章《Threads and Locks》，原文大概30页pdf，我加入了很多自己的理解，希望能帮大家把规范看懂，并且从中得到很多你一直想要知道但是还不知">
 <meta property="og:image" content="http://yoursite.com/images/shang.jpg">
-<meta property="og:updated_time" content="2017-07-05T13:56:13.000Z">
+<meta property="og:updated_time" content="2017-07-07T07:42:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解读 Java8 编程语言规范：Threads-And-Locks">
-<meta name="twitter:description" content="在java并发编程中，线程和锁永远是最重要的概念。相信这篇文章还是可以给很多读者提供学习参考的。 本文主要是翻译加上解释Oracle《Java 8编程语言规范》的第17章《Threads and Locks》，原文大概30页pdf，我加入了很多自己的理解，希望能帮大家把规范看懂，并且从中得到很多你一直想要知道但是还不知道的知识。 现在京东和当当已经有售《Java语言规范：基于Java SE 8》这">
+<meta name="twitter:description" content="在java并发编程中，线程和锁永远是最重要的概念。相信这篇文章还是可以给很多读者提供学习参考的。 本文主要是翻译 + 解释 Oracle《The Java Language Specification, Java SE 8 Edition》的第17章《Threads and Locks》，原文大概30页pdf，我加入了很多自己的理解，希望能帮大家把规范看懂，并且从中得到很多你一直想要知道但是还不知">
 <meta name="twitter:image" content="http://yoursite.com/images/shang.jpg">
 
 
@@ -365,18 +365,15 @@
 
       
         <p>在java并发编程中，线程和锁永远是最重要的概念。相信这篇文章还是可以给很多读者提供学习参考的。</p>
-<p>本文主要是翻译加上解释Oracle《Java 8编程语言规范》的第17章《<a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-17.html" target="_blank" rel="external">Threads and Locks</a>》，原文大概30页pdf，我加入了很多自己的理解，希望能帮大家把规范看懂，并且从中得到很多你一直想要知道但是还不知道的知识。</p>
-<p>现在京东和当当已经有售《Java语言规范：基于Java SE 8》这本中文翻译，我还没有看过，如果读者需要看语言规范的全貌，也许这是个不错的选择，不过我也不知道好不好，评论里面都是快递很快、书页印刷不错、纸质好、是正版等等。但是之前出版的一本语言规范，翻译实在是烂到家了，语句一点都不通，我也不知道为什么那种书籍都能上市。</p>
-<p>说实话，我写到一半的时候，非常后悔写这篇文章。越到后面，翻译理解就越是困难，我花了大量的时候来查资料组织语言，可是有些内容我写得还是不尽如人意。</p>
-<p>我为什么要做这件事，看了这篇文章对你会有什么好处？</p>
+<p>本文主要是<strong>翻译 + 解释</strong> Oracle《<a href="https://docs.oracle.com/javase/specs/index.html" target="_blank" rel="external">The Java Language Specification, Java SE 8 Edition</a>》的第17章《<a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-17.html" target="_blank" rel="external">Threads and Locks</a>》，原文大概30页pdf，我加入了很多自己的理解，希望能帮大家把规范看懂，并且从中得到很多你一直想要知道但是还不知道的知识。</p>
+<p>笔者能力有限，只能尽心尽力，我花了大量的时间在这篇文章上，希望能真正帮助到一部分人。能力不能及之处，我已经在文中标记出来了。</p>
+<p>建议分 3 部分阅读。</p>
+<ol>
+<li>将 17.1、17.2、17.3 一起阅读，这里关于线程中的 wait、notify、中断有很多的知识；</li>
+<li>17.4 的内存模型比较长，重排序和 happens-before 关系是重点；</li>
+<li>剩下的 final、字分裂、double和long的非原子问题，这些都是相对独立的 topic。</li>
+</ol>
 <a id="more"></a>
-<p>首先，吐槽一下，看过国人太多的相关文章，很多人就是敢说敢写，自己都不知道到底对不对。也吐槽一下国内的许多写技术书籍的，很多明显就是直接Google翻译了一下外文，或许很多作者其实英语很好，但是对程序的理解是不够的，描述出来的文字读起来就不是个味。</p>
-<p>别看原文只有30页，但是翻译起来真的很烧脑，有时候翻译一句话都可能需要很长的时间，毕竟英文和中文在表达上很不一样，而且原文中的一些句子比较难懂。我已经花费了大量的时间在这件事情上面，而且这种文章其实读的人可能不是很多。中国程序员快餐吃多了，也不管对不对就记下了，下次就敢拿出来吹牛逼。</p>
-<p><strong>重点加粗：</strong>前言都是废话，只有这里是重点，如果你想在 Java 领域了解得更多，请少接触些快餐资料，我也看过很多的技术文章，很多都不系统，还有很多描述都是错误的，或者是过时的。并发是成为高级Java程序员一定会碰到的槛，请大家多看看<strong>有用的</strong>、<strong>正确的</strong>、<strong>系统的</strong>资料，不然就是辜负了大好的年华了。</p>
-<p>看似简单的一件事花费了我很大的精力，因为我也希望既然做了，就严格保证翻译的质量，不然就是既浪费了时间，对大家来说又没有任何的帮助。本文经过<span style="color: blue"><a href="https://limengqing.github.io" target="_blank" rel="external">女朋友</a></span>的反复校对，如果还有错误，也是。。。正常的，请email我，蟹蟹。对于部分内容，我能力有限，没有翻译的部分我特别标注出来了，我不理解的部分也标记了，希望读者理解。</p>
-<p>不说废话了，遭人嫌弃。</p>
-<p><span style="color: red">对了，我很无耻地在文末放了打赏的二维码。。。维码。。码。</span></p>
-<p><span style="color: red">女朋友在找工作，求推荐，javaer，详情看最后</span></p>
 <div style="text-align: center; font-size: 24px; font-weight: bold">Chapter 17. Threads and Locks</div>
 
 <!-- toc -->
@@ -418,88 +415,101 @@
 <li><a href="#放广告啦">放广告啦</a></li>
 </ul>
 <!-- tocstop -->
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在java中，线程由Thread类表示，用户创建线程的唯一方式是创建Thread类的一个实例，每一个线程都和这样的一个实例关联。在相应的Thread实例上调用start()方法将启动一个线程。</p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在 java 中，线程由 Thread 类表示，用户创建线程的唯一方式是创建 Thread 类的一个实例，每一个线程都和这样的一个实例关联。在相应的 Thread 实例上调用 start() 方法将启动一个线程。</p>
 <p>如果没有正确使用同步，线程表现出来的现象将会是令人疑惑的、违反直觉的。这个章节将描述多线程编程的语义问题，包括一系列的规则，这些规则定义了在多线程环境中线程对共享内存中值的修改是否对其他线程立即可见。java编程语言内存模型定义了统一的内存模型用于屏蔽不同的硬件架构，在没有歧义的情况下，下面将用内存模型表示这个概念。</p>
-<p>这些语义没有规定多线程的程序在JVM的实现上应该怎么执行，而是限定了一系列规则，由JVM厂商来满足这些规则，即不管JVM的执行策略是什么，表现出来的行为必须是可被接受的。</p>
-<h3 id="171-同步synchronization"><a href="#17-1-同步（synchronization）" class="headerlink" title="17.1 同步（synchronization）"></a>17.1 同步（synchronization）</h3><p>Java提供了多种线程之间通信的机制，其中最基本的就是使用同步(synchronization)，其使用监视器(monitor)来实现。java中的<strong>每个对象都关联了一个监视器</strong>，线程可以对其进行加锁和解锁操作。在同一时间，只有一个线程可以拿到对象上的监视器锁。如果其他线程在锁被占用期间试图去获取锁，那么将会被阻塞直到成功获取到锁。同时，监视器锁可以重入，也就是说如果线程 t 拿到了锁，那么线程 t 可以在解锁之前重复获取锁；每次解锁操作会反转一次加锁产生的效果。</p>
-<p>synchronized有以下两种使用方式：</p>
+<p>这些语义没有规定多线程的程序在 JVM 的实现上应该怎么执行，而是限定了一系列规则，由 JVM 厂商来满足这些规则，即不管 JVM 的执行策略是什么，表现出来的行为必须是可被接受的。</p>
+<h3 id="171-同步synchronization"><a href="#17-1-同步（synchronization）" class="headerlink" title="17.1 同步（synchronization）"></a>17.1 同步（synchronization）</h3><p>Java 提供了多种线程之间通信的机制，其中最基本的就是使用同步 (synchronization)，其使用监视器 (monitor) 来实现。java中的<strong>每个对象都关联了一个监视器</strong>，线程可以对其进行加锁和解锁操作。在同一时间，只有一个线程可以拿到对象上的监视器锁。如果其他线程在锁被占用期间试图去获取锁，那么将会被阻塞直到成功获取到锁。同时，监视器锁可以重入，也就是说如果线程 t 拿到了锁，那么线程 t 可以在解锁之前重复获取锁；每次解锁操作会反转一次加锁产生的效果。</p>
+<p>synchronized 有以下两种使用方式：</p>
 <ol>
-<li><p>synchronized代码块。synchronized(object) 在对某个对象上执行加锁时，会尝试在该对象的监视器上进行加锁操作，只有成功获取锁之后，线程才会继续往下执行。线程获取到了监视器锁后，将继续执行synchronized代码块中的代码，如果代码块执行完成，或者抛出了异常，线程将会自动对该对象上的监视器执行解锁操作。</p>
+<li><p>synchronized 代码块。synchronized(object) 在对某个对象上执行加锁时，会尝试在该对象的监视器上进行加锁操作，只有成功获取锁之后，线程才会继续往下执行。线程获取到了监视器锁后，将继续执行 synchronized 代码块中的代码，如果代码块执行完成，或者抛出了异常，线程将会自动对该对象上的监视器执行解锁操作。</p>
 </li>
-<li><p>synchronized作用于方法，称为同步方法。同步方法被调用时，会自动执行加锁操作，只有加锁成功，方法体才会得到执行。如果被synchronized修饰的方法是实例方法，那么这个实例的监视器会被锁定。如果是static方法，线程会锁住相应的Class对象的监视器。方法体执行完成或者异常退出后，会自动执行解锁操作。</p>
+<li><p>synchronized 作用于方法，称为同步方法。同步方法被调用时，会自动执行加锁操作，只有加锁成功，方法体才会得到执行。如果被 synchronized 修饰的方法是实例方法，那么这个实例的监视器会被锁定。如果是 static 方法，线程会锁住相应的 Class 对象的监视器。方法体执行完成或者异常退出后，会自动执行解锁操作。</p>
 </li>
 </ol>
 <p>Java语言规范既不要求阻止死锁的发生，也不要求检测到死锁的发生。如果线程要在多个对象上执行加锁操作，那么就应该使用传统的方法来避免死锁的发生，如果有必要的话，需要创建更高层次的不会产生死锁的加锁原语。（原文：Programs where threads hold (directly or indirectly) locks on multiple objects should use conventional techniques for deadlock avoidance, creating higher-level locking primitives that do not deadlock, if necessary.）</p>
-<p>java还提供了其他的一些同步机制，比如对volatile变量的读写、使用java.util.concurrent包中的同步工具类等。</p>
+<p>java 还提供了其他的一些同步机制，比如对 volatile 变量的读写、使用 java.util.concurrent 包中的同步工具类等。</p>
 <blockquote>
-<p><strong>同步</strong>这一节说了Java并发编程中最基础的synchronized这个关键字，大家一定要理解synchronize的锁是什么，它的锁是基于Java对象的监视器。有兴趣的读者可以去了解相关知识，包括偏向锁、轻量级锁、重量级锁等。</p>
-<p>小知识点：对Class对象加锁、对对象加锁，它们之间不构成同步。synchronized作用于静态方法是对Class对象加锁。</p>
+<p><strong>同步</strong>这一节说了 Java 并发编程中最基础的 synchronized 这个关键字，大家一定要理解 synchronize 的锁是什么，它的锁是基于 Java 对象的监视器，所有任何对象都可以用来做锁。有兴趣的读者可以去了解相关知识，包括偏向锁、轻量级锁、重量级锁等。</p>
+<p>小知识点：对 Class 对象加锁、对对象加锁，它们之间不构成同步。synchronized 作用于静态方法时是对 Class 对象加锁。</p>
+<p>面试中经常会问到一个类中的两个 synchronized static 方法之间是否构成同步？构成同步。</p>
 </blockquote>
 <h3 id="172-等待集合-和-唤醒wait-sets-and-notification"><a href="#17-2-等待集合-和-唤醒（Wait-Sets-and-Notification）" class="headerlink" title="17.2 等待集合 和 唤醒（Wait Sets and Notification）"></a>17.2 等待集合 和 唤醒（Wait Sets and Notification）</h3><p>每个java对象，都关联了一个监视器，也关联了一个等待集合。等待集合是一个线程集合。</p>
 <p>当对象被创建出来时，它的等待集合是空的，对于向等待集合中添加或者移除线程的操作都是原子的，以下几个操作可以操纵这个等待集合：Object.wait, Object.notify, Object.notifyAll。</p>
-<p>等待集合也可能受到线程的中断状态的影响，也受到线程中处理中断的方法的影响。另外，sleep方法和join方法可以感知到线程的wait和notify。</p>
+<p>等待集合也可能受到线程的中断状态的影响，也受到线程中处理中断的方法的影响。另外，sleep 方法和 join 方法可以感知到线程的 wait 和 notify。</p>
 <blockquote>
 <p>这节要讲Java线程的相关知识，主要包括：</p>
 <ul>
-<li>Thread中的sleep、join、interrupt</li>
-<li>继承自Object的wait、notify、notifyAll</li>
-<li>还有Java的中断，这个概念也很重要</li>
+<li>Thread中的 sleep、join、interrupt</li>
+<li>继承自 Object 的 wait、notify、notifyAll</li>
+<li>还有 Java 的中断，这个概念也很重要</li>
 </ul>
 </blockquote>
 <h4 id="1721-等待-wait"><a href="#17-2-1-等待-（Wait）" class="headerlink" title="17.2.1 等待 （Wait）"></a>17.2.1 等待 （Wait）</h4><p> 等待操作由以下几个方法引发：wait()，wait(long millisecs)，wait(long millisecs, int nanosecs)。在后面两个重载方法中，如果参数为0，即wait(0)、wait(0, 0) 和wait() 是等效的。</p>
-<p>如果调用wait方法时没有抛出InterruptedException异常，则表示正常返回。</p>
-<p>我们在线程 t 中对对象 m 调用 m.wait()方法，n代表加锁编号，同时没有相匹配的解锁操作，则下面的其中之一会发生：</p>
+<p>如果调用 wait 方法时没有抛出 InterruptedException 异常，则表示正常返回。</p>
+<p>我们在线程 t 中对对象 m 调用 m.wait() 方法，n 代表加锁编号，同时没有相匹配的解锁操作，则下面的其中之一会发生：</p>
 <ul>
-<li><p>如果n等于0（如线程t没有持有对象m的锁），那么会抛出IllegalMonitorStateException异常。</p>
+<li><p>如果 n 等于 0（如线程 t 没有持有对象 m 的锁），那么会抛出 IllegalMonitorStateException 异常。</p>
 <blockquote>
-<p>注意，如果没有获取到监视器锁，wait方法是会抛异常的，而且注意这个异常是IllegalMonitorStateException异常</p>
+<p>注意，如果没有获取到监视器锁，wait 方法是会抛异常的，而且注意这个异常是IllegalMonitorStateException 异常</p>
 </blockquote>
 </li>
-<li><p>如果线程t调用的是m.wait(millisecs) 或m.wait(millisecs, nanosecs)，形参millisecs不能为负数，nanosecs取值应为[0, 999999]，否则会抛出IllegalArgumentException异常。</p>
+<li><p>如果线程 t 调用的是 m.wait(millisecs) 或m.wait(millisecs, nanosecs)，形参 millisecs 不能为负数，nanosecs 取值应为 [0, 999999]，否则会抛出 IllegalArgumentException 异常。</p>
 </li>
-<li><p>如果线程t被中断，则抛出InterruptedException异常，并将中断状态设置为false。</p>
+<li><p>如果线程 t 被中断，则抛出 InterruptedException 异常，并将中断状态设置为 false。</p>
 </li>
 <li><p>否则，下面的操作会顺序发生：</p>
-<p>1.线程t会加入到对象m的等待集合中，执行 加锁编号n 对应的解锁操作</p>
 <blockquote>
-<p>这里也非常关键，前面说了，wait方法的调用必须是线程获取到了对象的监视器锁，而这里会进行解锁操作。切记切记。。。</p>
+<p>注意：到这里的时候，wait 参数是正常的，同时 t 没有被中断，并且线程 t 已经拿到了 m 的监视器锁。</p>
+</blockquote>
+<p>1.线程 t 会加入到对象 m 的等待集合中，执行 加锁编号 n 对应的解锁操作</p>
+<blockquote>
+<p>这里也非常关键，前面说了，wait 方法的调用必须是线程获取到了对象的监视器锁，而这里会进行解锁操作。切记切记。。。</p>
  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> Object object = <span class="keyword">new</span> Object();</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">thread1</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span> (object) &#123; <span class="comment">// 获取监视器锁</span></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            object.wait(); <span class="comment">// 这里会解锁，这里会解锁，这里会解锁</span></div><div class="line">            <span class="comment">// 顺便提一下，只是解了object上的监视器锁，如果这个线程还持有其他对象的监视器锁，这个时候是不会释放的。</span></div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            <span class="comment">// do somethings</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </blockquote>
-<p>2.线程t不会执行任何进一步的指令，直到它从m的等待集合中移出。在发生以下操作的时候，线程t会从m的等待集合中移出，然后在之后的某个时间点恢复，并继续执行之后的指令。</p>
+<p>2.线程 t 不会执行任何进一步的指令，直到它从 m 的等待集合中移出。在发生以下操作的时候，线程 t 会从 m 的等待集合中移出，然后在之后的某个时间点恢复，并继续执行之后的指令。</p>
 <blockquote>
-<p>并不是说线程移出等待队列就马上往下执行，这需要等待操作系统的调度</p>
+<p>并不是说线程移出等待队列就马上往下执行，这个线程还需要重新获取锁，请往后看17.2.4中我写的两个简单的例子。</p>
 </blockquote>
 <ul>
-<li><p>在m上执行了notify操作，而且线程t被选中从等待集合中移除。</p>
+<li><p>在 m上执行了 notify 操作，而且线程 t 被选中从等待集合中移除。</p>
 </li>
-<li><p>在m上执行了notifyAll操作，那么线程t会从等待集合中移除。</p>
+<li><p>在 m 上执行了 notifyAll 操作，那么线程 t 会从等待集合中移除。</p>
 </li>
-<li><p>线程t发生了interrupt操作。</p>
+<li><p>线程 t 发生了 interrupt 操作。</p>
 </li>
-<li><p>如果线程t是调用wait(millisecs)或者wait(millisecs, nanosecs)方法进入等待集合的，那么过了millisecs毫秒或者(millisecs*1000000+nanosecs)纳秒后，线程t也会从等待集合中移出。</p>
+<li><p>如果线程 t 是调用 wait(millisecs) 或者 wait(millisecs, nanosecs) 方法进入等待集合的，那么过了millisecs 毫秒或者 (millisecs*1000000+nanosecs) 纳秒后，线程t也会从等待集合中移出。</p>
 </li>
-<li><p>JVM的“假唤醒”，虽然这是不鼓励的，但是这种操作是被允许的，这样JVM能实现将线程从等待集合中移出，而不必等待具体的移出指令。</p>
-<p>注意，良好的Java编码习惯是，只在循环中使用wait方法，这个循环等待某些条件来退出循环。</p>
+<li><p>JVM 的“假唤醒”，虽然这是不鼓励的，但是这种操作是被允许的，这样 JVM 能实现将线程从等待集合中移出，而不必等待具体的移出指令。</p>
+<p>注意，良好的 Java 编码习惯是，只在循环中使用 wait 方法，这个循环等待某些条件来退出循环。</p>
 <blockquote>
 <p>个人理解wait方法是这么用的：</p>
  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">synchronized</span>(m) &#123;</div><div class="line">    <span class="keyword">while</span>(!canExit) &#123;</div><div class="line">      m.wait(<span class="number">10</span>); <span class="comment">// 等待10ms; 当然中断也是常用的</span></div><div class="line">      canExit = something();  <span class="comment">// 判断是否可以退出循环</span></div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 2个知识点：</span></div><div class="line"><span class="comment">// 1. 必须先获取到对象上的监视器锁</span></div><div class="line"><span class="comment">// 2. wait有可能被假唤醒</span></div></pre></td></tr></table></figure>
 </blockquote>
-<p>​每个线程在一系列 可能导致它从等待集合中移出的事件 中必须决定一个顺序。这个顺序不必要和其他顺序一致，但是线程必须表现为它是按照那个顺序发生的。</p>
-<p>​例如，线程 t 现在在 m 的等待集合中，不管是线程t中断还是 m 的 notify 方法被调用，这些操作事件肯定存在一个顺序。如果线程t的中断先发生，那么 t 会因为InterruptedException 异常而从 wait 方法中返回，同时m的等待集合中的其他线程（如果有的话）会收到这个通知。如果 m 的 notify 先发生，那么 t 会正常从 wait 方法返回，且不会改变中断状态。</p>
+<p>每个线程在一系列 可能导致它从等待集合中移出的事件 中必须决定一个顺序。这个顺序不必要和其他顺序一致，但是线程必须表现为它是按照那个顺序发生的。</p>
+<p>例如，线程 t 现在在 m 的等待集合中，不管是线程 t 中断还是 m 的 notify 方法被调用，这些操作事件肯定存在一个顺序。如果线程 t 的中断先发生，那么 t 会因为 InterruptedException 异常而从 wait 方法中返回，同时 m 的等待集合中的其他线程（如果有的话）会收到这个通知。如果 m 的 notify 先发生，那么 t 会正常从 wait 方法返回，且不会改变中断状态。</p>
+<blockquote>
+<p>我们考虑这个场景：</p>
+<p>线程 1 和线程 2 此时都 wait 了，线程 3 调用了 ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="keyword">synchronized</span> (object) &#123;</div><div class="line">&gt; 	thread1.interrupt(); <span class="comment">//1</span></div><div class="line">&gt; 	object.notify();  <span class="comment">//2</span></div><div class="line">&gt; &#125;</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>我们可以在这两条语句之间加入些代码，防止它们重排序，重排序的问题之后会说到。如果你是自己测试的话，要注意这点。</p>
+<p>当方法 3 从这个同步代码块出来的时候，线程 1 是因为中断结束了 wait，线程 2 是因为 notify 结束了 wait。这里不会出现语句 2 的 notify 被作用于线程 1，即线程 1 不会既是中断又是 notify，即使在notify的时候，线程 1 还在等待的 set 中，即使线程 1 被选中来唤醒，这个 notify 一定会传递给其他的线程。</p>
+</blockquote>
 </li>
 </ul>
 </li>
 </ul>
-<p>3.线程t执行编号为n的加锁操作</p>
-<p>4.如果线程t在2的时候由于中断而从 m 的等待集合中移出，那么它的中断状态会重置为 false，同时 wait 方法会抛出 InterruptedException 异常。</p>
+<p>3.线程 t 执行编号为 n 的加锁操作</p>
+<p>4.如果线程 t 在 2 的时候由于中断而从 m 的等待集合中移出，那么它的中断状态会重置为 false，同时 wait 方法会抛出 InterruptedException 异常。</p>
 <blockquote>
 <p>这一节主要在讲线程进出等待集合的各种情况，同时，最好要知道中断是怎么用的，中断的状态重置发生于什么时候。</p>
-<p>如果线程在调用 wait 方法时已经被中断，或者在调用 wait 方法之后被中断，都会抛出 InterruptedException 异常。</p>
 </blockquote>
 <h4 id="1722-通知notification"><a href="#17-2-2-通知（Notification）" class="headerlink" title="17.2.2 通知（Notification）"></a>17.2.2 通知（Notification）</h4><p>通知操作发生于调用 notify 和 notifyAll 方法。</p>
 <p>我们在线程 t 中对对象 m 调用 m.notify()或m.notifyAll()方法，n 代表加锁编号，同时对应的解锁操作没有执行，则下面的其中之一会发生：</p>
 <ul>
-<li><p>如果 n 等于0，抛出 IllegalMonitorStateException 异常，因为线程 t 还没有获取到对象m上的锁。</p>
+<li><p>如果 n 等于0，抛出 IllegalMonitorStateException 异常，因为线程 t 还没有获取到对象 m 上的锁。</p>
 <blockquote>
 <p>这一点很关键，只有获取到了对象上的监视器锁的线程才可以正常调用 notify</p>
 </blockquote>
@@ -507,7 +517,7 @@
 <li><p>如果 n 大于 0，而且这是一个 notify 操作，如果 m 的等待集合不为空，那么等待集合中的线程 u 被选中从等待集合中移出。</p>
 <p>对于哪个线程会被选中而被移出，虚拟机没有提供任何保证，从等待集合中将线程 u 移出，可以让线程 u 得以恢复。注意，恢复之后的线程 u 如果对 m 进行加锁操作将不会成功，直到线程 t 完全释放锁之后。</p>
 <blockquote>
-<p>因为线程 t 这个时候还持有 m 的锁。其实这句说的是，被 notify 的线程在想要重新尝试获取锁的时候没有享有什么特权，当然也不是说被降权了，反正就是该怎样怎样。</p>
+<p>因为线程 t 这个时候还持有 m 的锁。这个知识点在 17.2.4 节我还会重点说。这里记住，被 notify 的线程在唤醒后是需要重新获取监视器锁的。</p>
 </blockquote>
 </li>
 <li><p>如果 n 大于 0，而且这是一个 notifyAll 操作，那么等待集合中的所有线程都将从等待集合中移出，然后恢复。</p>
@@ -515,7 +525,7 @@
 </li>
 </ul>
 <blockquote>
-<p>本小节结束，通知操作很简单吧。</p>
+<p>本小节结束，通知操作相对来说还是很简单的吧。</p>
 </blockquote>
 <h4 id="1723-中断interruptions"><a href="#17-2-3-中断（Interruptions）" class="headerlink" title="17.2.3 中断（Interruptions）"></a>17.2.3 中断（Interruptions）</h4><p>中断发生于 Thread.interrupt 方法的调用。</p>
 <p>令线程 t 调用线程 u 上的方法 u.interrupt()，其中 t 和 u 可能是相同的，这个操作会将 u 的中断状态设置为 true。</p>
@@ -534,8 +544,8 @@
 </blockquote>
 <p>另外，如果有一个对象m，而且线程 u 此时在 m 的等待集合中，那么 u 将会从 m 的等待集合中移出。这会让 u 从 wait 操作中恢复过来，u 再次获取 m 的监视器锁，此时会抛出 InterruptedException 异常。</p>
 <blockquote>
-<p>流程：设置中断 =&gt; 线程恢复 =&gt; 获取m的监视器锁 =&gt; 然后抛出的InterruptedException 异常</p>
-<p>这个流程在前面<strong>wait</strong>的小节已经讲过了，这也是很多人都不了解的知识点</p>
+<p>这里的流程：设置中断 =&gt; 线程恢复 =&gt; 获取 m 的监视器锁 =&gt; 然后抛出的InterruptedException 异常</p>
+<p>这个流程在前面 <strong>wait</strong> 的小节已经讲过了，这也是很多人都不了解的知识点。如果还不懂，可以看下一小节的结束，我的两个简单的例子。</p>
 </blockquote>
 <p>实例方法 thread.isInterrupted() 可以知道线程的中断状态。</p>
 <p>调用静态方法 Thread.interrupted() 可以返回当前线程的中断状态，同时将中断状态设置为false。</p>
@@ -553,24 +563,29 @@
 <p>线程可能没有重置它的中断状态，同时从 wait 方法中正常返回，即第一种情况。</p>
 <p>同样的，通知也不能由于中断而丢失。假设 m 的等待集合为 线程集合 s，并且在另一个线程中调用了 m.notify(), 那么将发生：</p>
 <ul>
-<li><p>至少有集合 s 中的一个线程正常从 wait 方法返回，或者</p>
-</li>
-<li><p>集合 s 中的所有线程由抛出 InterruptedException 异常而返回。</p>
-</li>
+<li>至少有集合 s 中的一个线程正常从 wait 方法返回，或者</li>
+<li>集合 s 中的所有线程由抛出 InterruptedException 异常而返回。</li>
 </ul>
+<blockquote>
+<p>考虑是否有这个场景：x 被设置了中断状态，notify 选中了集合中的线程 x，那么这次 notify 将唤醒线程 x，其他线程（我们假设还有其他线程在等待）不会有变化。</p>
+<p>答案：不存在这种场景。这种情况下，notify 会传递给其他线程。</p>
+</blockquote>
 <p>注意，如果一个线程同时被中断和通知唤醒，同时这个线程通过抛出 InterruptedException 异常从 wait 中返回，那么等待集合中的某个其他线程一定会被通知。</p>
 <blockquote>
 <p>这节其实很难懂的，说的是前面的 wait、notify和中断的交互问题。</p>
-<p>wait方法返回只有两种情况，要么对象 notify 方法被调用，要么线程的中断状态在其他地方被设置为 true 了。</p>
-<p>这节还需要注意的一点是，如果线程接到 notify 的选中那么它应该是正常被唤醒的，可是这个时候如果中断状态为 true，那么 notify 将作用于线程集合中的其他线程，不然这次 notify 就无效了嘛。</p>
+<p>wait 方法返回只有两种情况，要么对象 notify 方法被调用，要么线程的中断状态在其他地方被设置为 true 了。</p>
+<p>考虑以下操作：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WaitNotify</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"></div><div class="line">        Object object = <span class="keyword">new</span> Object();</div><div class="line"></div><div class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">                <span class="keyword">synchronized</span> (object) &#123;</div><div class="line">                    System.out.println(<span class="string">"线程1 获取到监视器锁"</span>);</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        object.wait();</div><div class="line">                        System.out.println(<span class="string">"线程1 恢复啦。我为什么这么久才恢复，因为notify方法虽然早就发生了，可是我还要获取锁才能继续执行。"</span>);</div><div class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                        System.out.println(<span class="string">"线程1 wait方法抛出了InterruptedException异常"</span>);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;, <span class="string">"线程1"</span>).start();</div><div class="line"></div><div class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="keyword">synchronized</span> (object) &#123;</div><div class="line">                    System.out.println(<span class="string">"线程2 拿到了监视器锁。为什么呢，因为线程1 在 wait 方法的时候会自动释放锁"</span>);</div><div class="line">                    System.out.println(<span class="string">"线程2 执行 notify 操作"</span>);</div><div class="line">                    object.notify();</div><div class="line">                    System.out.println(<span class="string">"线程2 执行完了 notify，先休息3秒再说。"</span>);</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        Thread.sleep(<span class="number">3000</span>);</div><div class="line">                        System.out.println(<span class="string">"线程2 休息完啦。注意了，调sleep方法和wait方法不一样，不会释放监视器锁"</span>);</div><div class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line"></div><div class="line">                    &#125;</div><div class="line">                    System.out.println(<span class="string">"线程2 休息够了，结束操作"</span>);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;, <span class="string">"线程2"</span>).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">output：</div><div class="line">线程<span class="number">1</span> 获取到监视器锁</div><div class="line">线程<span class="number">2</span> 拿到了监视器锁。为什么呢，因为线程<span class="number">1</span> 在 wait 方法的时候会自动释放锁</div><div class="line">线程<span class="number">2</span> 执行 notify 操作</div><div class="line">线程<span class="number">2</span> 执行完了 notify，先休息<span class="number">3</span>秒再说。</div><div class="line">线程<span class="number">2</span> 休息完啦。注意了，调sleep方法和wait方法不一样，不会释放监视器锁</div><div class="line">线程<span class="number">2</span> 休息够了，结束操作</div><div class="line">线程<span class="number">1</span> 恢复啦。我为什么这么久才恢复，因为notify方法虽然早就发生了，可是我还要获取锁才能继续执行。</div></pre></td></tr></table></figure></p>
+<p>同理，我们稍微修改下以上的程序，看下中断：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WaitNotify</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"></div><div class="line">        Object object = <span class="keyword">new</span> Object();</div><div class="line"></div><div class="line">        Thread thread1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">                <span class="keyword">synchronized</span> (object) &#123;</div><div class="line">                    System.out.println(<span class="string">"线程1 获取到监视器锁"</span>);</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        object.wait();</div><div class="line">                        System.out.println(<span class="string">"线程1 恢复啦。我为什么这么久才恢复，因为notify方法虽然早就发生了，可是我还要获取锁才能继续执行。"</span>);</div><div class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                        System.out.println(<span class="string">"线程1 wait方法抛出了InterruptedException异常，即使是异常，我也是要获取到监视器锁了才会抛出"</span>);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;, <span class="string">"线程1"</span>);</div><div class="line">        thread1.start();</div><div class="line"></div><div class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="keyword">synchronized</span> (object) &#123;</div><div class="line">                    System.out.println(<span class="string">"线程2 拿到了监视器锁。为什么呢，因为线程1 在 wait 方法的时候会自动释放锁"</span>);</div><div class="line">                    System.out.println(<span class="string">"线程2 设置线程1 中断"</span>);</div><div class="line">                    thread1.interrupt();</div><div class="line">                    System.out.println(<span class="string">"线程2 执行完了 中断，先休息3秒再说。"</span>);</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        Thread.sleep(<span class="number">3000</span>);</div><div class="line">                        System.out.println(<span class="string">"线程2 休息完啦。注意了，调sleep方法和wait方法不一样，不会释放监视器锁"</span>);</div><div class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line"></div><div class="line">                    &#125;</div><div class="line">                    System.out.println(<span class="string">"线程2 休息够了，结束操作"</span>);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;, <span class="string">"线程2"</span>).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">output:</div><div class="line">线程<span class="number">1</span> 获取到监视器锁</div><div class="line">线程<span class="number">2</span> 拿到了监视器锁。为什么呢，因为线程<span class="number">1</span> 在 wait 方法的时候会自动释放锁</div><div class="line">线程<span class="number">2</span> 设置线程<span class="number">1</span> 中断</div><div class="line">线程<span class="number">2</span> 执行完了 中断，先休息<span class="number">3</span>秒再说。</div><div class="line">线程<span class="number">2</span> 休息完啦。注意了，调sleep方法和wait方法不一样，不会释放监视器锁</div><div class="line">线程<span class="number">2</span> 休息够了，结束操作</div><div class="line">线程<span class="number">1</span> wait方法抛出了InterruptedException异常，即使是异常，我也是要获取到监视器锁了才会抛出</div></pre></td></tr></table></figure></p>
+<p>我们再来考虑下，之前说的 notify 和中断：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> io.github.hongjiev.learning;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by hongjie on 2017/7/7.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WaitNotify</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">volatile</span> <span class="keyword">int</span> a = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"></div><div class="line">        Object object = <span class="keyword">new</span> Object();</div><div class="line"></div><div class="line">        WaitNotify waitNotify = <span class="keyword">new</span> WaitNotify();</div><div class="line"></div><div class="line">        Thread thread1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">                <span class="keyword">synchronized</span> (object) &#123;</div><div class="line">                    System.out.println(<span class="string">"线程1 获取到监视器锁"</span>);</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        object.wait();</div><div class="line">                        System.out.println(<span class="string">"线程1 正常恢复啦。"</span>);</div><div class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                        System.out.println(<span class="string">"线程1 wait方法抛出了InterruptedException异常"</span>);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;, <span class="string">"线程1"</span>);</div><div class="line">        thread1.start();</div><div class="line"></div><div class="line">        Thread thread2 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">                <span class="keyword">synchronized</span> (object) &#123;</div><div class="line">                    System.out.println(<span class="string">"线程2 获取到监视器锁"</span>);</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        object.wait();</div><div class="line">                        System.out.println(<span class="string">"线程2 正常恢复啦。"</span>);</div><div class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                        System.out.println(<span class="string">"线程2 wait方法抛出了InterruptedException异常"</span>);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;, <span class="string">"线程2"</span>);</div><div class="line">        thread2.start();</div><div class="line"></div><div class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="keyword">synchronized</span> (object) &#123;</div><div class="line">                    System.out.println(<span class="string">"线程3 拿到了监视器锁。"</span>);</div><div class="line">                    System.out.println(<span class="string">"线程3 设置线程1中断"</span>);</div><div class="line">                    thread1.interrupt();</div><div class="line">                    waitNotify.a = <span class="number">1</span>; <span class="comment">// 这行是为了禁止上下的两行中断和notify代码重排序</span></div><div class="line">                    System.out.println(<span class="string">"线程3 调用notify"</span>);</div><div class="line">                    object.notify();</div><div class="line">                    System.out.println(<span class="string">"线程3 调用完notify后，休息一会"</span>);</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        Thread.sleep(<span class="number">3000</span>);</div><div class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                    &#125;</div><div class="line">                    System.out.println(<span class="string">"线程3 休息够了，结束同步代码块"</span>);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;, <span class="string">"线程3"</span>).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">output:</div><div class="line">线程<span class="number">1</span> 获取到监视器锁</div><div class="line">线程<span class="number">2</span> 获取到监视器锁</div><div class="line">线程<span class="number">3</span> 拿到了监视器锁。</div><div class="line">线程<span class="number">3</span> 设置线程<span class="number">1</span>中断</div><div class="line">线程<span class="number">3</span> 调用notify</div><div class="line">线程<span class="number">3</span> 调用完notify后，休息一会</div><div class="line">线程<span class="number">3</span> 休息够了，结束同步代码块</div><div class="line">线程<span class="number">2</span> 正常恢复啦。</div><div class="line">线程<span class="number">1</span> wait方法抛出了InterruptedException异常</div></pre></td></tr></table></figure></p>
+<p>这段代码反复执行，每次都会是同样的结果，不会出现 notify 被作用于线程 1 的情况。</p>
 </blockquote>
 <h3 id="173-休眠和礼让sleep-and-yield"><a href="#17-3-休眠和礼让（Sleep-and-Yield）" class="headerlink" title="17.3. 休眠和礼让（Sleep and Yield）"></a>17.3. 休眠和礼让（Sleep and Yield）</h3><p>Thread.sleep(millisecs) 使当前正在执行的线程休眠指定的一段时间（暂时停止执行任何指令），时间取决于参数值，精度受制于系统的定时器。<strong>休眠期间，线程不会释放任何的监视器锁</strong>。线程的恢复取决于定时器和处理器的可用性，即有可用的处理器来唤醒线程。</p>
-<p>需要注意的是，Thread.sleep 和 Thread.yield 都不具有同步的语义。在Thread.sleep 和 Thread.yield 方法调用之前，编译器不要求将寄存器中的缓存刷出到共享内存中，同时也不要求编译器在这两个方法调用之后，重新从共享内存中读取数据到缓存。</p>
-<p><em>例如，我们有如下代码块，this.done 定义为一个non-volatile的属性，初始值为false。</em></p>
+<p>需要注意的是，Thread.sleep 和 Thread.yield 都不具有同步的语义。在 Thread.sleep 和 Thread.yield 方法调用之前，编译器不要求将寄存器中的缓存刷出到共享内存中，同时也不要求编译器在这两个方法调用之后，重新从共享内存中读取数据到缓存。</p>
+<p><em>例如，我们有如下代码块，this.done 定义为一个 non-volatile 的属性，初始值为 false。</em></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> (!<span class="keyword">this</span>.done)</div><div class="line">    Thread.sleep(<span class="number">1000</span>);</div></pre></td></tr></table></figure>
-<p><em>编译器可以只读取一次this.done到缓存中，然后一直使用缓存中的值，也就是说，这个循环可能永远不会结束，即使是有其他线程将this.done的值修改为true。</em></p>
+<p><em>编译器可以只读取一次 this.done 到缓存中，然后一直使用缓存中的值，也就是说，这个循环可能永远不会结束，即使是有其他线程将 this.done 的值修改为 true。</em></p>
 <blockquote>
-<p>yield是告诉操作系统的调度器：我的cpu可以先让给其他线程。注意，调度器可以不理会这个信息。这个方法几乎没用。</p>
+<p>yield 是告诉操作系统的调度器：我的cpu可以先让给其他线程。注意，调度器可以不理会这个信息。这个方法几乎没用。</p>
 </blockquote>
 <h3 id="174-内存模型memory-model"><a href="#17-4-内存模型（Memory-Model）" class="headerlink" title="17.4 内存模型（Memory Model）"></a>17.4 内存模型（Memory Model）</h3><blockquote>
 <p>内存模型这一节比较长，请耐心阅读</p>

@@ -367,10 +367,14 @@
       
         
           <p>在java并发编程中，线程和锁永远是最重要的概念。相信这篇文章还是可以给很多读者提供学习参考的。</p>
-<p>本文主要是翻译加上解释Oracle《Java 8编程语言规范》的第17章《<a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-17.html" target="_blank" rel="external">Threads and Locks</a>》，原文大概30页pdf，我加入了很多自己的理解，希望能帮大家把规范看懂，并且从中得到很多你一直想要知道但是还不知道的知识。</p>
-<p>现在京东和当当已经有售《Java语言规范：基于Java SE 8》这本中文翻译，我还没有看过，如果读者需要看语言规范的全貌，也许这是个不错的选择，不过我也不知道好不好，评论里面都是快递很快、书页印刷不错、纸质好、是正版等等。但是之前出版的一本语言规范，翻译实在是烂到家了，语句一点都不通，我也不知道为什么那种书籍都能上市。</p>
-<p>说实话，我写到一半的时候，非常后悔写这篇文章。越到后面，翻译理解就越是困难，我花了大量的时候来查资料组织语言，可是有些内容我写得还是不尽如人意。</p>
-<p>我为什么要做这件事，看了这篇文章对你会有什么好处？</p>
+<p>本文主要是<strong>翻译 + 解释</strong> Oracle《<a href="https://docs.oracle.com/javase/specs/index.html" target="_blank" rel="external">The Java Language Specification, Java SE 8 Edition</a>》的第17章《<a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-17.html" target="_blank" rel="external">Threads and Locks</a>》，原文大概30页pdf，我加入了很多自己的理解，希望能帮大家把规范看懂，并且从中得到很多你一直想要知道但是还不知道的知识。</p>
+<p>笔者能力有限，只能尽心尽力，我花了大量的时间在这篇文章上，希望能真正帮助到一部分人。能力不能及之处，我已经在文中标记出来了。</p>
+<p>建议分 3 部分阅读。</p>
+<ol>
+<li>将 17.1、17.2、17.3 一起阅读，这里关于线程中的 wait、notify、中断有很多的知识；</li>
+<li>17.4 的内存模型比较长，重排序和 happens-before 关系是重点；</li>
+<li>剩下的 final、字分裂、double和long的非原子问题，这些都是相对独立的 topic。</li>
+</ol>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/07/05/Threads-And-Locks-md/#more" rel="contents">
