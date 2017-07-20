@@ -100,7 +100,7 @@
 <meta property="og:site_name" content="Java熊">
 <meta property="og:description" content="在 java 并发编程中，线程和锁永远是最重要的概念。语言规范虽然是规范描述，但是其中也有非常多的知识和最佳实践是值得学习的，相信这篇文章还是可以给很多读者提供学习参考的。 本文主要是翻译 + 解释 Oracle《The Java Language Specification, Java SE 8 Edition》的第17章《Threads and Locks》，原文大概30页pdf，我加入了很多">
 <meta property="og:image" content="http://yoursite.com/images/shang.jpg">
-<meta property="og:updated_time" content="2017-07-10T03:00:46.000Z">
+<meta property="og:updated_time" content="2017-07-20T07:32:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入分析 java 8 编程语言规范：Threads and Locks">
 <meta name="twitter:description" content="在 java 并发编程中，线程和锁永远是最重要的概念。语言规范虽然是规范描述，但是其中也有非常多的知识和最佳实践是值得学习的，相信这篇文章还是可以给很多读者提供学习参考的。 本文主要是翻译 + 解释 Oracle《The Java Language Specification, Java SE 8 Edition》的第17章《Threads and Locks》，原文大概30页pdf，我加入了很多">
@@ -412,7 +412,6 @@
 <li><a href="#references">References</a></li>
 <li><a href="#结语">结语</a></li>
 <li><a href="#放大招啦">放大招啦</a></li>
-<li><a href="#放广告啦">放广告啦</a></li>
 </ul>
 <!-- tocstop -->
 <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在 java 中，线程由 Thread 类表示，用户创建线程的唯一方式是创建 Thread 类的一个实例，每一个线程都和这样的一个实例关联。在相应的 Thread 实例上调用 start() 方法将启动一个线程。</p>
@@ -533,12 +532,13 @@
 <li><p>wait(), wait(long), wait(long, int), join(), join(long), join(long, int), sleep(long), sleep(long, int)</p>
 <p>这些方法都有一个共同之处，方法签名上都有<code>throws InterruptedException</code>，这个就是用来响应中断状态修改的。</p>
 </li>
-<li><p>如果线程阻塞在 InterruptibleChannel 的 IO 操作中，那么这个 channel 会被关闭。</p>
+<li><p>如果线程阻塞在 InterruptibleChannel 类的 IO 操作中，那么这个 channel 会被关闭。</p>
 </li>
-<li><p>如果线程阻塞在一个 Selector 中，那么这个方法会立即返回。</p>
+<li><p>如果线程阻塞在一个 Selector 中，那么 select 方法会立即返回。</p>
 </li>
 </ol>
-<p>如果线程阻塞在以上3种情况中，那么当线程感知到中断状态后，会将中断状态设置为false，然后执行相应的操作。如果不是以上3种情况，那么线程中断状态就会被设置为true。</p>
+<p>如果线程阻塞在以上3种情况中，那么当线程感知到中断状态后，会将中断状态重新设置为 false，然后执行相应的操作。如果不是以上3种情况，那么线程中断状态就会被设置为 true。</p>
+<p>当然，除了这几个方法，我知道的是 LockSupport 中的 park 方法也能自动感知到线程被中断，当然，它不会重置中断为 false。</p>
 </blockquote>
 <p>另外，如果有一个对象m，而且线程 u 此时在 m 的等待集合中，那么 u 将会从 m 的等待集合中移出。这会让 u 从 wait 操作中恢复过来，u 再次获取 m 的监视器锁，此时会抛出 InterruptedException 异常。</p>
 <blockquote>
@@ -837,7 +837,7 @@
 <blockquote>
 <p>大家看完这节最懵逼的应该是<code>外部操作</code>和<code>线程分歧操作</code>，我简单解释下。</p>
 <p>外部操作大家可以理解为 Java 调用了一个 native 的方法，Java可以得到这个 native 方法的返回值，但是对于具体的执行其实不感知的，意味着 Java 其实不能对这种语句进行重排序，因为 Java 无法知道方法体会执行哪些指令。</p>
-<p>引用stackoverflow中的一个例子：</p>
+<p>引用 stackoverflow 中的一个例子：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// method()方法中jni()是外部操作，不会和 "foo = 42;" 这条语句进行重排序。</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Externalization</span> </span>&#123; </div><div class="line">  <span class="keyword">int</span> foo = <span class="number">0</span>; </div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123; </div><div class="line">    jni(); <span class="comment">// 外部操作</span></div><div class="line">    foo = <span class="number">42</span>; </div><div class="line">  &#125; </div><div class="line">  <span class="function"><span class="keyword">native</span> <span class="keyword">void</span> <span class="title">jni</span><span class="params">()</span></span>; <span class="comment">/* &#123; </span></div><div class="line">    assert foo == 0; //我们假设外部操作执行的是这个。</div><div class="line">  &#125; */ </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>再来个线程分歧操作的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 线程分歧操作阻止了重排序，所以 "foo = 42;" 这条语句不会先执行</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreadDivergence</span> </span>&#123; </div><div class="line">  <span class="keyword">int</span> foo = <span class="number">0</span>; </div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">thread1</span><span class="params">()</span> </span>&#123; </div><div class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;&#125; <span class="comment">// 线程分歧操作</span></div><div class="line">    foo = <span class="number">42</span>; </div><div class="line">  &#125; </div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">thread2</span><span class="params">()</span> </span>&#123; </div><div class="line">    <span class="keyword">assert</span> foo == <span class="number">0</span>; </div><div class="line">  &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 </blockquote>
@@ -1110,10 +1110,6 @@
 </blockquote>
 <h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>路还很长，如果有机会，我会在其中挑出一些 topic 出来和大家分享我自己的理解。</p>
 <h3 id="放大招啦"><a href="#放大招啦" class="headerlink" title="放大招啦"></a>放大招啦</h3><p><img src="/images/shang.jpg" alt=""></p>
-<h3 id="放广告啦"><a href="#放广告啦" class="headerlink" title="放广告啦"></a>放广告啦</h3><p>我有一个可爱的小猫咪，她是我的女朋友</p>
-<p>女朋友正在寻找新的职业机会，求一二线互联网公司收留。猫咪长相甜美，皮肤白皙，来自理工科男生聚集的同济，主修经济学，对哲学有比较深的研究，<strong>对编程是真爱</strong>。</p>
-<p>技术娴熟，代码写得很溜。期望有合适岗位的小伙伴们多多内推，感激不尽。</p>
-<p>猫咪主页：<a href="https://limengqing.github.io" target="_blank" rel="external">https://limengqing.github.io</a></p>
 
       
     </div>
@@ -1159,6 +1155,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/20/AbstractQueuedSynchronizer-2/" rel="prev" title="一行一行源码分析清楚 AbstractQueuedSynchronizer (二)">
+                一行一行源码分析清楚 AbstractQueuedSynchronizer (二) <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -1230,7 +1230,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1247,6 +1247,15 @@
             </div>
           
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>
@@ -1278,7 +1287,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#171-同步synchronization"><span class="nav-number">2.</span> <span class="nav-text">17.1 同步（synchronization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#172-等待集合-和-唤醒wait-sets-and-notification"><span class="nav-number">3.</span> <span class="nav-text">17.2 等待集合 和 唤醒（Wait Sets and Notification）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1721-等待-wait"><span class="nav-number">3.1.</span> <span class="nav-text">17.2.1 等待 （Wait）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1722-通知notification"><span class="nav-number">3.2.</span> <span class="nav-text">17.2.2 通知（Notification）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1723-中断interruptions"><span class="nav-number">3.3.</span> <span class="nav-text">17.2.3 中断（Interruptions）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1724-等待-通知和中断-的交互interactions-of-waits-notification-and-interruption"><span class="nav-number">3.4.</span> <span class="nav-text">17.2.4 等待、通知和中断 的交互（Interactions of Waits, Notification, and Interruption）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#173-休眠和礼让sleep-and-yield"><span class="nav-number">4.</span> <span class="nav-text">17.3. 休眠和礼让（Sleep and Yield）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#174-内存模型memory-model"><span class="nav-number">5.</span> <span class="nav-text">17.4 内存模型（Memory Model）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1741-共享变量shared-variables"><span class="nav-number">5.1.</span> <span class="nav-text">17.4.1. 共享变量（Shared Variables）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1742-操作actions"><span class="nav-number">5.2.</span> <span class="nav-text">17.4.2. 操作（Actions）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1743-程序和程序顺序programs-and-program-order"><span class="nav-number">5.3.</span> <span class="nav-text">17.4.3. 程序和程序顺序（Programs and Program Order）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1744-同步顺序synchronization-order"><span class="nav-number">5.4.</span> <span class="nav-text">17.4.4. 同步顺序（Synchronization Order）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1745-happens-before顺序happens-before-order"><span class="nav-number">5.5.</span> <span class="nav-text">17.4.5. Happens-before顺序（Happens-before Order）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1746-executions"><span class="nav-number">5.6.</span> <span class="nav-text">17.4.6. Executions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1747-well-formed-executions"><span class="nav-number">5.7.</span> <span class="nav-text">17.4.7. Well-Formed Executions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1748-executions-and-causality-requirements"><span class="nav-number">5.8.</span> <span class="nav-text">17.4.8. Executions and Causality Requirements</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1749-observable-behavior-and-nonterminating-executions"><span class="nav-number">5.9.</span> <span class="nav-text">17.4.9. Observable Behavior and Nonterminating Executions</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#175-final-属性的语义final-field-semantics"><span class="nav-number">6.</span> <span class="nav-text">17.5. final 属性的语义（final Field Semantics）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1751-final属性的语义semantics-of-final-fields"><span class="nav-number">6.1.</span> <span class="nav-text">17.5.1. final属性的语义（Semantics of final Fields）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1752-在构造期间读-final-属性reading-final-fields-during-construction"><span class="nav-number">6.2.</span> <span class="nav-text">17.5.2. 在构造期间读 final 属性（Reading final Fields During Construction）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1753-final-属性的后续修改subsequent-modification-of-final-fields"><span class="nav-number">6.3.</span> <span class="nav-text">17.5.3. final 属性的后续修改（Subsequent Modification of final Fields）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1754-写保护属性write-protected-fields"><span class="nav-number">6.4.</span> <span class="nav-text">17.5.4. 写保护属性（Write-Protected Fields）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#176-字分裂word-tearing"><span class="nav-number">7.</span> <span class="nav-text">17.6. 字分裂（Word Tearing）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#177-double-和-long-的非原子处理-non-atomic-treatment-of-double-and-long"><span class="nav-number">8.</span> <span class="nav-text">17.7. double 和 long 的非原子处理 （Non-Atomic Treatment of double and long）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#references"><span class="nav-number">9.</span> <span class="nav-text">References</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结语"><span class="nav-number">10.</span> <span class="nav-text">结语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#放大招啦"><span class="nav-number">11.</span> <span class="nav-text">放大招啦</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#放广告啦"><span class="nav-number">12.</span> <span class="nav-text">放广告啦</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#171-同步synchronization"><span class="nav-number">2.</span> <span class="nav-text">17.1 同步（synchronization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#172-等待集合-和-唤醒wait-sets-and-notification"><span class="nav-number">3.</span> <span class="nav-text">17.2 等待集合 和 唤醒（Wait Sets and Notification）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1721-等待-wait"><span class="nav-number">3.1.</span> <span class="nav-text">17.2.1 等待 （Wait）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1722-通知notification"><span class="nav-number">3.2.</span> <span class="nav-text">17.2.2 通知（Notification）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1723-中断interruptions"><span class="nav-number">3.3.</span> <span class="nav-text">17.2.3 中断（Interruptions）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1724-等待-通知和中断-的交互interactions-of-waits-notification-and-interruption"><span class="nav-number">3.4.</span> <span class="nav-text">17.2.4 等待、通知和中断 的交互（Interactions of Waits, Notification, and Interruption）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#173-休眠和礼让sleep-and-yield"><span class="nav-number">4.</span> <span class="nav-text">17.3. 休眠和礼让（Sleep and Yield）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#174-内存模型memory-model"><span class="nav-number">5.</span> <span class="nav-text">17.4 内存模型（Memory Model）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1741-共享变量shared-variables"><span class="nav-number">5.1.</span> <span class="nav-text">17.4.1. 共享变量（Shared Variables）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1742-操作actions"><span class="nav-number">5.2.</span> <span class="nav-text">17.4.2. 操作（Actions）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1743-程序和程序顺序programs-and-program-order"><span class="nav-number">5.3.</span> <span class="nav-text">17.4.3. 程序和程序顺序（Programs and Program Order）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1744-同步顺序synchronization-order"><span class="nav-number">5.4.</span> <span class="nav-text">17.4.4. 同步顺序（Synchronization Order）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1745-happens-before顺序happens-before-order"><span class="nav-number">5.5.</span> <span class="nav-text">17.4.5. Happens-before顺序（Happens-before Order）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1746-executions"><span class="nav-number">5.6.</span> <span class="nav-text">17.4.6. Executions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1747-well-formed-executions"><span class="nav-number">5.7.</span> <span class="nav-text">17.4.7. Well-Formed Executions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1748-executions-and-causality-requirements"><span class="nav-number">5.8.</span> <span class="nav-text">17.4.8. Executions and Causality Requirements</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1749-observable-behavior-and-nonterminating-executions"><span class="nav-number">5.9.</span> <span class="nav-text">17.4.9. Observable Behavior and Nonterminating Executions</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#175-final-属性的语义final-field-semantics"><span class="nav-number">6.</span> <span class="nav-text">17.5. final 属性的语义（final Field Semantics）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1751-final属性的语义semantics-of-final-fields"><span class="nav-number">6.1.</span> <span class="nav-text">17.5.1. final属性的语义（Semantics of final Fields）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1752-在构造期间读-final-属性reading-final-fields-during-construction"><span class="nav-number">6.2.</span> <span class="nav-text">17.5.2. 在构造期间读 final 属性（Reading final Fields During Construction）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1753-final-属性的后续修改subsequent-modification-of-final-fields"><span class="nav-number">6.3.</span> <span class="nav-text">17.5.3. final 属性的后续修改（Subsequent Modification of final Fields）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1754-写保护属性write-protected-fields"><span class="nav-number">6.4.</span> <span class="nav-text">17.5.4. 写保护属性（Write-Protected Fields）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#176-字分裂word-tearing"><span class="nav-number">7.</span> <span class="nav-text">17.6. 字分裂（Word Tearing）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#177-double-和-long-的非原子处理-non-atomic-treatment-of-double-and-long"><span class="nav-number">8.</span> <span class="nav-text">17.7. double 和 long 的非原子处理 （Non-Atomic Treatment of double and long）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#references"><span class="nav-number">9.</span> <span class="nav-text">References</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结语"><span class="nav-number">10.</span> <span class="nav-text">结语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#放大招啦"><span class="nav-number">11.</span> <span class="nav-text">放大招啦</span></a></li></ol></div>
             
 
           </div>
