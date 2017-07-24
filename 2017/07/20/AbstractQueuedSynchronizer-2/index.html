@@ -101,7 +101,7 @@
 <meta property="og:description" content="文章比较长，信息量比较大，建议在 pc 上阅读。文章标题是为了呼应前文，其实可以单独成文的，主要是希望读者看文章能系统看。写到后面，我都想给这篇文章取几个唬人的标题了，差点变成标题党，如：  深入理解 ReentrantLock 公平锁和非公平锁的区别 深入分析 AbstractQueuedSynchronizer 中的 ConditionObject 深入理解 java 线程中断和 Interr">
 <meta property="og:image" content="http://yoursite.com/2017/07/20/AbstractQueuedSynchronizer-2/aqs2-1.png">
 <meta property="og:image" content="http://yoursite.com/2017/07/20/AbstractQueuedSynchronizer-2/aqs2-2.png">
-<meta property="og:updated_time" content="2017-07-20T07:53:17.000Z">
+<meta property="og:updated_time" content="2017-07-21T02:19:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一行一行源码分析清楚 AbstractQueuedSynchronizer (二)">
 <meta name="twitter:description" content="文章比较长，信息量比较大，建议在 pc 上阅读。文章标题是为了呼应前文，其实可以单独成文的，主要是希望读者看文章能系统看。写到后面，我都想给这篇文章取几个唬人的标题了，差点变成标题党，如：  深入理解 ReentrantLock 公平锁和非公平锁的区别 深入分析 AbstractQueuedSynchronizer 中的 ConditionObject 深入理解 java 线程中断和 Interr">
@@ -343,6 +343,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/20/AbstractQueuedSynchronizer-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/07/20/AbstractQueuedSynchronizer-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -587,6 +598,9 @@
 <p>而对于 lockInterruptibly() 方法，因为其方法上面有 <code>throws InterruptedException</code> ，这个信号告诉我们，如果我们要取消线程抢锁，直接中断这个线程即可，它会立即返回，抛出 InterruptedException 异常。</p>
 <p>在并发包中，有非常多的这种处理中断的例子，提供两个方法，分别为响应中断和不响应中断，对于不响应中断的方法，记录中断而不是丢失这个信息。如 Condition 中的两个方法就是这样的：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">awaitUninterruptibly</span><span class="params">()</span></span>;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>通常，如果方法会抛出 InterruptedException 异常，往往方法体的第一句就是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">    <span class="keyword">if</span> (Thread.interrupted())</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException();</div><div class="line"> 	...... </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
 <p>我相信，清楚并熟练使用中断，对于我们写出优雅的代码是有帮助的，也有助于我们分析别人的源码。</p>
 <blockquote>
 <p>参考：<a href="https://www.ibm.com/developerworks/library/j-jtp05236/index.html" target="_blank" rel="external">https://www.ibm.com/developerworks/library/j-jtp05236/index.html</a></p>
@@ -663,6 +677,13 @@
           
   <div class="comments" id="comments">
     
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
   </div>
 
 
@@ -726,15 +747,6 @@
             </div>
           
 
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              
-                <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">标签</span>
-              
-            </div>
           
 
         </nav>
@@ -902,6 +914,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://javaxiong.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/07/20/AbstractQueuedSynchronizer-2/';
+          this.page.identifier = '2017/07/20/AbstractQueuedSynchronizer-2/';
+          this.page.title = '一行一行源码分析清楚 AbstractQueuedSynchronizer (二)';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://javaxiong.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -920,10 +952,6 @@
   
 
 
-
-
-
-  
 
 
 
