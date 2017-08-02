@@ -101,7 +101,7 @@
 <meta property="og:description" content="文章比较长，信息量比较大，建议在 pc 上阅读。文章标题是为了呼应前文，其实可以单独成文的，主要是希望读者看文章能系统看。写到后面，我都想给这篇文章取几个唬人的标题了，差点变成标题党，如：  深入理解 ReentrantLock 公平锁和非公平锁的区别 深入分析 AbstractQueuedSynchronizer 中的 ConditionObject 深入理解 java 线程中断和 Interr">
 <meta property="og:image" content="http://yoursite.com/2017/07/20/AbstractQueuedSynchronizer-2/aqs2-1.png">
 <meta property="og:image" content="http://yoursite.com/2017/07/20/AbstractQueuedSynchronizer-2/aqs2-2.png">
-<meta property="og:updated_time" content="2017-07-21T02:19:04.000Z">
+<meta property="og:updated_time" content="2017-07-26T02:54:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一行一行源码分析清楚 AbstractQueuedSynchronizer (二)">
 <meta name="twitter:description" content="文章比较长，信息量比较大，建议在 pc 上阅读。文章标题是为了呼应前文，其实可以单独成文的，主要是希望读者看文章能系统看。写到后面，我都想给这篇文章取几个唬人的标题了，差点变成标题党，如：  深入理解 ReentrantLock 公平锁和非公平锁的区别 深入分析 AbstractQueuedSynchronizer 中的 ConditionObject 深入理解 java 线程中断和 Interr">
@@ -593,7 +593,7 @@
 <p>当 sleep 结束继续往下执行的时候，我们往往都不知道这块代码是真的 sleep 了 10 秒，还是只休眠了 1 秒就被中断了。这个代码的问题在于，我们将这个异常信息吞掉了。（对于 sleep 方法，我相信大部分情况下，我们都不在意是否是中断了，这里是举例）</p>
 <p>AQS 的做法很值得我们借鉴，我们知道 ReentrantLock 有两种 lock 方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</div><div class="line">    sync.lock();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">    sync.acquireInterruptibly(<span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>前面我们提到过，lock() 方法不相应中断。如果 thread1 调用了 lock() 方法，过了很久还没抢到锁，这个时候 thread2 对其进行了中断，thread1 是不响应这个请求的，它会继续抢锁，当然它不会把“被中断”这个信息扔掉。我们可以看以下代码：</p>
+<p>前面我们提到过，lock() 方法不响应中断。如果 thread1 调用了 lock() 方法，过了很久还没抢到锁，这个时候 thread2 对其进行了中断，thread1 是不响应这个请求的，它会继续抢锁，当然它不会把“被中断”这个信息扔掉。我们可以看以下代码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;</div><div class="line">        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</div><div class="line">        <span class="comment">// 我们看到，这里也没做任何特殊处理，就是记录下来中断状态。</span></div><div class="line">        <span class="comment">// 这样，如果外层方法需要去检测的时候，至少我们没有把这个信息丢了</span></div><div class="line">        selfInterrupt();<span class="comment">// Thread.currentThread().interrupt();</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>而对于 lockInterruptibly() 方法，因为其方法上面有 <code>throws InterruptedException</code> ，这个信号告诉我们，如果我们要取消线程抢锁，直接中断这个线程即可，它会立即返回，抛出 InterruptedException 异常。</p>
 <p>在并发包中，有非常多的这种处理中断的例子，提供两个方法，分别为响应中断和不响应中断，对于不响应中断的方法，记录中断而不是丢失这个信息。如 Condition 中的两个方法就是这样的：</p>
@@ -652,6 +652,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/30/AbstractQueuedSynchronizer-3/" rel="prev" title="一行一行源码分析清楚 AbstractQueuedSynchronizer (三)">
+                一行一行源码分析清楚 AbstractQueuedSynchronizer (三) <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -730,7 +734,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
