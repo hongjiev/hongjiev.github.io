@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://yoursite.com/2017/09/05/java-thread-pool/1.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/09/05/java-thread-pool/others.png">
 <meta property="og:image" content="http://yoursite.com/2017/09/05/java-thread-pool/pool-1.png">
-<meta property="og:updated_time" content="2017-09-05T11:27:27.000Z">
+<meta property="og:updated_time" content="2017-09-05T13:42:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度解读 java 线程池设计思想及源码实现">
 <meta name="twitter:description" content="我相信大家都看过很多的关于线程池的文章，基本上也是面试必问的，好像我写这篇文章其实是没有什么意义的，不过，我相信你也和我一样，看了很多文章还是一知半解，甚至可能看了很多瞎说的文章。希望大家看过这篇文章以后，就可以完全掌握 java 线程池了。 本文一大重点是源码解析，不过线程池设计思想以及作者实现过程中的一些巧妙用法是我想传达给读者的。本文还是会一行行关键代码进行分析，目的是为了让那些自己看源码不">
@@ -578,11 +578,11 @@
 <ol>
 <li><p>java 线程池有哪些关键属性？</p>
 <blockquote>
-<p>corePoolSize，maximumPoolSize，workQueue，rejectedExecutionHandler</p>
+<p>corePoolSize，maximumPoolSize，workQueue，keepAliveTime，rejectedExecutionHandler</p>
 <p>corePoolSize 到 maximumPoolSize 之间的线程会被回收，当然 corePoolSize 的线程也可以通过设置而得到回收（allowCoreThreadTimeOut(true)）。</p>
-<p>keepAliveTime 用于设置空闲时间，如果线程数超出了 corePoolSize，并且有些线程的空闲时间超过了这个值，会执行关闭这些线程的操作</p>
 <p>workQueue 用于存放任务，添加任务的时候，如果当前线程数超过了 corePoolSize，那么往该队列中插入任务，线程池中的线程会负责到队列中拉取任务。</p>
-<p>rejectedExecutionHandler 用于处理当线程池中没有线程时提交的任务，默认有拒绝、忽略、使用提交任务的来执行此任务和抛出异常这四种策略。</p>
+<p>keepAliveTime 用于设置空闲时间，如果线程数超出了 corePoolSize，并且有些线程的空闲时间超过了这个值，会执行关闭这些线程的操作</p>
+<p>rejectedExecutionHandler 用于处理当线程池不能执行此任务时的情况，默认有<strong>抛出 RejectedExecutionException 异常</strong>、<strong>忽略任务</strong>、<strong>使用提交任务的线程来执行此任务</strong>和<strong>将队列中等待最久的任务删除，然后提交此任务</strong>这四种策略，默认为抛出异常。</p>
 </blockquote>
 </li>
 <li><p>说说线程池中的线程创建时机？</p>
