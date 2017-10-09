@@ -1,0 +1,856 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="本文假设读者对于设计模式有一定的理解，对代码抽象化有一定的认知，还有，本文 java。 限于篇幅，本文不会做非常深入的对设计模式的介绍，本人也不是严格设计模式的狂热拥护者。 我会介绍我们工作中常用到的设计模式，看来这也适合那些为面试而准备设计模式的读者。 我本来想一篇文章说所有的设计模式的，工作都完成一半了，不过篇幅大了些，所以拆一下，分为三篇分别介绍创建型模式、结构型模式和行为型模式，毕竟它们之">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不带废话地说一遍设计模式（一）">
+<meta property="og:url" content="http://yoursite.com/2017/10/09/design-pattern-1/index.html">
+<meta property="og:site_name" content="Java熊">
+<meta property="og:description" content="本文假设读者对于设计模式有一定的理解，对代码抽象化有一定的认知，还有，本文 java。 限于篇幅，本文不会做非常深入的对设计模式的介绍，本人也不是严格设计模式的狂热拥护者。 我会介绍我们工作中常用到的设计模式，看来这也适合那些为面试而准备设计模式的读者。 我本来想一篇文章说所有的设计模式的，工作都完成一半了，不过篇幅大了些，所以拆一下，分为三篇分别介绍创建型模式、结构型模式和行为型模式，毕竟它们之">
+<meta property="og:image" content="http://yoursite.com/2017/10/09/design-pattern-1/factory-1.png">
+<meta property="og:image" content="http://yoursite.com/2017/10/09/design-pattern-1/factory-2.png">
+<meta property="og:image" content="http://yoursite.com/2017/10/09/design-pattern-1/factory-3.png">
+<meta property="og:updated_time" content="2017-10-09T08:20:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="不带废话地说一遍设计模式（一）">
+<meta name="twitter:description" content="本文假设读者对于设计模式有一定的理解，对代码抽象化有一定的认知，还有，本文 java。 限于篇幅，本文不会做非常深入的对设计模式的介绍，本人也不是严格设计模式的狂热拥护者。 我会介绍我们工作中常用到的设计模式，看来这也适合那些为面试而准备设计模式的读者。 我本来想一篇文章说所有的设计模式的，工作都完成一半了，不过篇幅大了些，所以拆一下，分为三篇分别介绍创建型模式、结构型模式和行为型模式，毕竟它们之">
+<meta name="twitter:image" content="http://yoursite.com/2017/10/09/design-pattern-1/factory-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/09/design-pattern-1/"/>
+
+
+
+
+
+  <title>不带废话地说一遍设计模式（一） | Java熊</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?4b184c55e2404e189b57f75ab8ac7158";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Java熊</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/09/design-pattern-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hong Jie">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Java熊">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">不带废话地说一遍设计模式（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-09T00:00:00+08:00">
+                2017-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/design-pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">design pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/09/design-pattern-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/10/09/design-pattern-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文假设读者对于设计模式有一定的理解，对代码抽象化有一定的认知，还有，本文 java。</p>
+<p>限于篇幅，本文不会做非常深入的对设计模式的介绍，本人也不是严格设计模式的狂热拥护者。</p>
+<p>我会介绍我们工作中常用到的设计模式，看来这也适合那些为面试而准备设计模式的读者。</p>
+<p>我本来想一篇文章说所有的设计模式的，工作都完成一半了，不过篇幅大了些，所以拆一下，分为三篇分别介绍创建型模式、结构型模式和行为型模式，毕竟它们之间也是有本质的区别的，这也有利于读者对各类设计模式进行更深入的思考。</p>
+<p>写这篇文章，我发现要把各个设计模式说清楚，就要说到其关键的点，这样读者才能永远记住，不然各个设计模式太相近了，对于初学者而言，看过就忘了。所以，如果你是设计模式的初学者，建议看完后，自己也可以把各个设计模式试着和别人说清楚。</p>
+<p>我很想给大家贴生产环境中符合各个设计模式的代码，可是纯的完全遵守各个设计模式的代码本身不是很多，大部分都是各个设计模式的变种，其次就是大部分的代码量都比较大，文章篇幅实在有限，对此只能抱歉了。</p>
+<a id="more"></a>
+<p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#创建一个对象-创建型模式">创建一个对象 - 创建型模式</a><ul>
+<li><a href="#简单工厂模式">简单工厂模式</a></li>
+<li><a href="#工厂模式">工厂模式</a></li>
+<li><a href="#抽象工厂模式">抽象工厂模式</a></li>
+<li><a href="#单例模式">单例模式</a></li>
+<li><a href="#建造者模式">建造者模式</a></li>
+<li><a href="#原型模式">原型模式</a></li>
+<li><a href="#创建型模式总结">创建型模式总结</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+<p>设计模式是对大家实际工作中写的各种代码进行高层次抽象的总结，其中最出名的当属 <em>Gang of Four</em> (<em>GoF</em>) 的分类了，他们将设计模式分类为 23 种经典的模式，根据用途又分为三大类，分别为创建型模式、结构型模式和行为型模式。</p>
+<p>有一些重要的设计原则在开篇和大家分享下，这算是对于设计模式的共识：</p>
+<ol>
+<li>面向接口编程，而不是面向实现。这个很重要，也是优雅的、可扩展的代码的第一步，这就不需要多说了吧。</li>
+<li>职责单一原则。每个类都应该有一个单一的功能，并且该功能应该由这个类完全封装起来</li>
+<li>对修改关闭，对扩展开放。对修改关闭是说，我们辛辛苦苦加班写出来的代码，该实现的功能和该修复的 bug 都完成了，别人可不能说改就改；对扩展开放就比较好理解了，也就是说在我们写好的代码基础上，很容易实现对功能进行增强。</li>
+</ol>
+<h2 id="创建一个对象-创建型模式"><a href="#创建一个对象-创建型模式" class="headerlink" title="创建一个对象 - 创建型模式"></a>创建一个对象 - 创建型模式</h2><p>说到创建一个对象，最熟悉的就是 new 一个对象，然后 set 相关属性。可是，如果我想要更加简单的办法，我想让代码更加优雅怎么办？那就需要引入我们的创建型模式了。</p>
+<h3 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h3><p>和名字一样简单，非常简单，本文不是说废话的，上代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FruitFactory</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Fruit <span class="title">getFruit</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (name.equals(<span class="string">"apple"</span>)) &#123;</div><div class="line">            Fruit apple = <span class="keyword">new</span> Apple();</div><div class="line">            apple.setSomething(<span class="string">""</span>);</div><div class="line">            <span class="keyword">return</span> apple;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (name.equals(<span class="string">"orange"</span>)) &#123;</div><div class="line">            Fruit orange = <span class="keyword">new</span> Orange();</div><div class="line">            orange.xyz();</div><div class="line">            <span class="keyword">return</span> orange;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><em>其中，Apple 和 Orange 都继承自 Fruit。</em></p>
+<p>简单地说，简单工厂模式通常就是这样，一个工厂类 XxxFactory，里面有一个静态方法，根据我们不同的参数，返回不同的派生自同一个父类（或实现同一接口）的实例对象。</p>
+<blockquote>
+<p>我们强调<strong>职责单一</strong>原则，一个类干一件事情，所以这里才说简单工厂里面只有一个对外的静态方法，FruitFactory 只要负责生产 Fruit。</p>
+</blockquote>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><p>简单工厂模式很简单，如果它能满足我们的需要，我觉得就不要折腾了。之所以需要引入工厂模式，是因为我们往往需要使用两个或两个以上的工厂。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">FoodFactory</span> </span>&#123;</div><div class="line">    <span class="function">Food <span class="title">getFood</span><span class="params">(String name)</span></span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChineseFoodFactory</span> <span class="keyword">implements</span> <span class="title">FoodFactory</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Food <span class="title">getFood</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (name.equals(<span class="string">"A"</span>)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ChineseFoodA();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (name.equals(<span class="string">"B"</span>)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ChineseFoodB();</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AmericanFoodFactory</span> <span class="keyword">implements</span> <span class="title">FoodFactory</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Food <span class="title">getFood</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (name.equals(<span class="string">"A"</span>)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> AmericanFoodA();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (name.equals(<span class="string">"B"</span>)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> AmericanFoodB();</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中，ChineseFoodA、ChineseFoodB、AmericanFoodA、AmericanFoodB 都派生自 Food。</p>
+<p>客户端调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">APP</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">// 先选择一个具体的工厂</span></div><div class="line">        FoodFactory factory = <span class="keyword">new</span> ChineseFoodFactory();</div><div class="line">        <span class="comment">// 由第一步的工厂产生具体的对象，不同的工厂造出不一样的对象</span></div><div class="line">        Food food = factory.getFood(<span class="string">"A"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第一步，我们需要选取合适的工厂，然后第二步基本上和简单工厂一样。</p>
+<p><strong>核心在于，我们需要在第一步选好我们需要的工厂</strong>。比如，我们有 LogFactory 接口，实现类有 FileLogFactory 和 KafkaLogFactory，分别对应将日志写入文件和写入 Kafka 中，显然，我们客户端第一步就需要决定到底要实例化 FileLogFactory 还是 KafkaLogFactory，这将决定之后的所有的操作。</p>
+<h3 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h3><p>当涉及到<strong>产品族</strong>的时候，就需要引入抽象工厂模式了。</p>
+<p>一个经典的例子是造一台电脑，因为电脑是由许多的构件组成的，我们将 CPU 和主板进行抽象，然后 CPU 由 CPUFactory 生产，主板由 MainBoardFactory 生产，然后，我们再将 CPU 和主板搭配起来组合在一起，如下图：</p>
+<p><img src="/2017/10/09/design-pattern-1/factory-1.png" alt="factory-1"></p>
+<p>我们可以认为<strong>上图中左右分别是一个工厂模式</strong>的使用，如果 CPU 和主板以及电脑中的其他组件都遵守同一套标准，CPU 和主板之间可以随意组合（这也就是所谓的<strong>标准</strong>），那么此模式非常成功，因为它非常好扩展。比如我们要加个硬盘，那么我们需要一个 HardDiskFactory 接口，然后有很多的硬盘工厂，这些工厂都可以造出它们自己的 HardDisk 的具体实现。</p>
+<p><strong>引入抽象工厂模式为了解决此问题：</strong>IntelCPU + AmdMainBoard 不工作，AmdCPU + IntelMainBoard 也不工作，它们之间不兼容，Intel 公司和 AMD 公司都自己制定标准，都想要垄断<strong>整个市场</strong>，那怎么办呢？</p>
+<blockquote>
+<p>这只是例子。PC 世界标准很重要，所以我们组装 PC 机才能如此简单。</p>
+</blockquote>
+<p>再多一点点废话，这里就会引入产品族的概念，CPU + 主板 + 硬盘 + … 它们是一个<strong>产品族</strong>，凑在一起组成一台电脑：</p>
+<p><img src="/2017/10/09/design-pattern-1/factory-2.png" alt="factory-2"></p>
+<p>对于消费者来说，大家都不希望我们买了 CPU、主板、硬盘，可是它们居然是不兼容的，一种就是我们说的<strong>标准</strong>，碰到类似代码问题的时候，我们先想想朝着这个方向能不能走通。另一种就是选定一个产品族，然后再进行购买。总不至于 IntelCPU 和自家的 IntelMainBoard 不兼容吧，这肯定不会出现对吧。</p>
+<p>所以，上面的两个工厂模式（也可以是多个）变一下就成了抽象工厂模式了：</p>
+<p><img src="/2017/10/09/design-pattern-1/factory-3.png" alt="factory-3"></p>
+<p>区别就是，现在 Intel 的工厂和 AMD 的工厂都变成了<strong>大厂</strong>，不再是只生产 CPU 或主板或硬盘这种独立的部件了。至于考虑到扩展，如果要增加硬盘，那么每个工厂都要进行相应的改动，都需要增加 makeHardDisk() 方法。</p>
+<p>最后，进行客户端演示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">APP</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">// 第一步就要选定一个“大厂”</span></div><div class="line">        ComputerFactory cf = <span class="keyword">new</span> AmdFactory();</div><div class="line">        <span class="comment">// 从这个大厂造 CPU</span></div><div class="line">        CPU cpu = cf.makeCPU();</div><div class="line">        <span class="comment">// 从这个大厂造主板</span></div><div class="line">        MainBoard board = cf.makeMainBoard();</div><div class="line">        <span class="comment">// 将同一个厂子出来的 CPU 和主板组装在一起</span></div><div class="line">        Computer result = <span class="keyword">new</span> Computer(cpu, board);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><p>单例模式用得最多，错得最多。</p>
+<p>饿汉模式最简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="comment">// 首先，将 new Singleton() 堵死</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;;</div><div class="line">    <span class="comment">// 创建私有静态实例，意味着这个类第一次使用的时候就会进行创建</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 瞎写一个静态方法。这里想说的是，如果我们只是要调用 Singleton.getDate(...)，</span></div><div class="line">    <span class="comment">// 本来是不想要生成 Singleton 实例的，不过没办法，已经生成了</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Date <span class="title">getDate</span><span class="params">(String mode)</span> </span>&#123;<span class="keyword">return</span> <span class="keyword">new</span> Date();&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>很多人都能说出饿汉模式的缺点，可是我觉得生产过程中，很少碰到这种情况：你定义了一个单例的类，不需要其实例，可是你却把一个或几个你会用到的静态方法塞到这个类中。</p>
+</blockquote>
+<p>饱汉模式最容易出错：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="comment">// 首先，也是先堵死 new Singleton() 这条路</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line">    <span class="comment">// 和饿汉模式相比，这边不需要先实例化出来，注意这里的 volatile，它是必须的</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> Singleton instance = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="comment">// 加锁</span></div><div class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</div><div class="line">                <span class="comment">// 这一次判断也是必须的，不然会有并发问题</span></div><div class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</div><div class="line">                    instance = <span class="keyword">new</span> Singleton();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>双重加锁，volatile 保证了线程间的可见性，synchronized 对可能的并发问题做同步</p>
+<p>很多人不知道怎么写，直接就在 getInstance() 方法签名上加上 synchronized，这就不多说了。</p>
+</blockquote>
+<p>嵌套类最经典，以后大家就用它吧：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton3</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton3</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line">    <span class="comment">// 主要是使用了 嵌套类可以访问外部类的静态属性和静态方法 的特性</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">static</span> Singleton3 instance = <span class="keyword">new</span> Singleton3();</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton3 <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> Holder.instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，很多人都会把这个<strong>嵌套类</strong>说成是<strong>静态内部类</strong>，严格地说，内部类和嵌套类是不一样的，它们能访问的外部类权限也是不一样的。</p>
+</blockquote>
+<p>最后，一定有人跳出来说用枚举实现单例，是的没错，枚举类很特殊，它在类加载的时候会初始化里面的所有的实例，而且 JVM 保证了它们不会再被实例化，所以它天生就是单例的。不说了，读者自己看着办吧，不建议使用。</p>
+<h3 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h3><p>经常碰见的 XxxBuilder 的类，通常都是建造者模式的产物。建造者模式其实有很多的变种，但是对于客户端来说，我们的使用通常都是一个模式的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Food food = <span class="keyword">new</span> FoodBuilder().a().b().c().build();</div><div class="line">Food food = Food.builder().a().b().c().build();</div></pre></td></tr></table></figure>
+<p>套路就是先 new 一个 Builder，然后可以链式地调用一堆方法，最后再调用一次 build() 方法，我们需要的对象就有了。</p>
+<p>来一个中规中矩的建造者模式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</div><div class="line">    <span class="comment">// 下面是“一堆”的属性</span></div><div class="line">    <span class="keyword">private</span> String  name;</div><div class="line">    <span class="keyword">private</span> String password;</div><div class="line">    <span class="keyword">private</span> String nickName;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</div><div class="line"></div><div class="line">    <span class="comment">// 构造方法私有化，不然客户端就会直接调用构造方法了</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">User</span><span class="params">(String name, String password, String nickName, <span class="keyword">int</span> age)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">        <span class="keyword">this</span>.password = password;</div><div class="line">        <span class="keyword">this</span>.nickName = nickName;</div><div class="line">        <span class="keyword">this</span>.age = age;</div><div class="line">    &#125;</div><div class="line">	<span class="comment">// 静态方法，用于生成一个 Builder，这个不一定要有，不过写这个方法是一个很好的习惯，</span></div><div class="line">    <span class="comment">// 有些代码要求别人写 new User.UserBuilder().a()...build() 看上去就没那么好</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> UserBuilder <span class="title">builder</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> UserBuilder();</div><div class="line">    &#125;</div><div class="line">   </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UserBuilder</span> </span>&#123;</div><div class="line">        <span class="comment">// 下面是和 User 一模一样的一堆属性</span></div><div class="line">        <span class="keyword">private</span> String  name;</div><div class="line">        <span class="keyword">private</span> String password;</div><div class="line">        <span class="keyword">private</span> String nickName;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">int</span> age;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">private</span> <span class="title">UserBuilder</span><span class="params">()</span> </span>&#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 链式调用设置各个属性值，返回 this，即 UserBuilder</span></div><div class="line">        <span class="function"><span class="keyword">public</span> UserBuilder <span class="title">name</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.name = name;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> UserBuilder <span class="title">password</span><span class="params">(String password)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.password = password;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> UserBuilder <span class="title">nickName</span><span class="params">(String nickName)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.nickName = nickName;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> UserBuilder <span class="title">age</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.age = age;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// build() 方法负责将 UserBuilder 中设置好的属性“复制”到 User 中。</span></div><div class="line">        <span class="comment">// 当然，可以在 “复制” 之前做点检验</span></div><div class="line">        <span class="function"><span class="keyword">public</span> User <span class="title">build</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">if</span> (name == <span class="keyword">null</span> || password == <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"用户名和密码必填"</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (age &lt;= <span class="number">0</span> || age &gt;= <span class="number">150</span>) &#123;</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"年龄不合法"</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 还可以做赋予”默认值“的功能</span></div><div class="line">          	<span class="keyword">if</span> (nickName == <span class="keyword">null</span>) &#123;</div><div class="line">                nickName = name;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> User(name, password, nickName, age);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>核心是：先把所有的属性都设置给 Builder，然后 build() 方法的时候，将这些属性<strong>复制</strong>给实际产生的对象。</p>
+<p>看看客户端的调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">APP</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        User d = User.builder()</div><div class="line">                .name(<span class="string">"foo"</span>)</div><div class="line">                .password(<span class="string">"pAss12345"</span>)</div><div class="line">                .age(<span class="number">25</span>)</div><div class="line">                .build();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>说实话，建造者模式的<strong>链式</strong>写法很吸引人，但是，多写了很多“无用”的 builder 的代码，感觉这个模式没什么用。不过，当属性很多，而且有些必填，有些选填的时候，这个模式会使代码清晰很多。我们可以在 <strong>Builder 的构造方法</strong>中强制让调用者提供必填字段，还有，在 build() 方法中校验各个参数比在 User 的构造方法中校验，代码要优雅一些。</p>
+<blockquote>
+<p>题外话，强烈建议读者使用 lombok，用了 lombok 以后，上面的一大堆代码会变成如下这样:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Builder</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> String  name;</div><div class="line">    <span class="keyword">private</span> String password;</div><div class="line">    <span class="keyword">private</span> String nickName;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>怎么样，省下来的时间是不是又可以干点别的了。</p>
+</blockquote>
+<p>当然，如果你只是想要链式写法，不想要建造者模式，有个很简单的办法，User 的 getter 方法不变，所有的 setter 方法都让其 <strong>return this</strong> 就可以了，然后就可以像下面这样调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">User user = <span class="keyword">new</span> User().setName(<span class="string">""</span>).setPassword(<span class="string">""</span>).setAge(<span class="number">20</span>);</div></pre></td></tr></table></figure>
+<h3 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h3><p>这是我要说的创建型模式的最后一个设计模式了。</p>
+<p>原型模式很简单：有一个原型<strong>实例</strong>，基于这个原型实例产生新的实例，也就是“克隆”了。</p>
+<p>Object 类中有一个 clone() 方法，它用于生成一个新的对象，当然，如果我们要调用这个方法，java 要求我们的类必须先<strong>实现 Cloneable 接口</strong>，此接口没有任何方法，但是不这么做的话，在 clone() 的时候，会抛出 CloneNotSupportedException 异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">native</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException</span>;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>java 的克隆是浅克隆，碰到对象引用的时候，克隆出来的对象和原对象中的引用将指向同一个对象。通常实现深克隆的方法是将对象进行序列化，然后再进行反序列化。</p>
+</blockquote>
+<p>原型模式了解到这里我觉得就够了，各种变着法子说这种代码或那种代码是原型模式，没什么意义。</p>
+<h3 id="创建型模式总结"><a href="#创建型模式总结" class="headerlink" title="创建型模式总结"></a>创建型模式总结</h3><p>此总结的目的是告诉读者，我们经常碰到的创建型模式就这些了。</p>
+<p>创建型模式总体上比较简单，它们的作用就是为了产生实例对象，算是各种工作的第一步了，因为我们写的是<strong>面向对象</strong>的代码，所以我们第一步当然是需要创建一个对象了。</p>
+<p>简单工厂模式最简单；工厂模式在简单工厂模式的基础上增加了选择工厂的维度，需要第一步选择合适的工厂；抽象工厂模式有产品族的概念，如果各个产品是存在兼容性问题的，就要用抽象工厂模式。单例模式就不说了，为了保证全局使用的是同一对象，一方面是安全性考虑，一方面是为了节省资源；建造者模式专门对付属性很多的那种类，为了让代码更优美；原型模式用得最少，了解和 Object 类中的 clone() 方法相关的知识即可。</p>
+<p>我总觉得<strong>创建型模式</strong>上升到<strong>设计模式</strong>有点怪怪的，它就是些创建对象的类似<strong>最佳实践</strong>的代码风格而已😂，不说了，说多会被人批评。感兴趣的读者可以关注后续即将成文的对结构型模式和行为型模式的介绍。</p>
+<p>（本文完）</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/05/java-thread-pool/" rel="next" title="深度解读 java 线程池设计思想及源码实现">
+                <i class="fa fa-chevron-left"></i> 深度解读 java 线程池设计思想及源码实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Hong Jie" />
+          <p class="site-author-name" itemprop="name">Hong Jie</p>
+           
+              <p class="site-description motion-element" itemprop="description">coding is coding.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建一个对象-创建型模式"><span class="nav-number">1.</span> <span class="nav-text">创建一个对象 - 创建型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单工厂模式"><span class="nav-number">1.1.</span> <span class="nav-text">简单工厂模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工厂模式"><span class="nav-number">1.2.</span> <span class="nav-text">工厂模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象工厂模式"><span class="nav-number">1.3.</span> <span class="nav-text">抽象工厂模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单例模式"><span class="nav-number">1.4.</span> <span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建造者模式"><span class="nav-number">1.5.</span> <span class="nav-text">建造者模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型模式"><span class="nav-number">1.6.</span> <span class="nav-text">原型模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建型模式总结"><span class="nav-number">1.7.</span> <span class="nav-text">创建型模式总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hong Jie</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://javaxiong.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/10/09/design-pattern-1/';
+          this.page.identifier = '2017/10/09/design-pattern-1/';
+          this.page.title = '不带废话地说一遍设计模式（一）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://javaxiong.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
