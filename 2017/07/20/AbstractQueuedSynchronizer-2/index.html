@@ -99,13 +99,13 @@
 <meta property="og:url" content="http://yoursite.com/2017/07/20/AbstractQueuedSynchronizer-2/index.html">
 <meta property="og:site_name" content="Java熊">
 <meta property="og:description" content="文章比较长，信息量比较大，建议在 pc 上阅读。文章标题是为了呼应前文，其实可以单独成文的，主要是希望读者看文章能系统看。写到后面，我都想给这篇文章取几个唬人的标题了，差点变成标题党，如：  深入理解 ReentrantLock 公平锁和非公平锁的区别 深入分析 AbstractQueuedSynchronizer 中的 ConditionObject 深入理解 java 线程中断和 Interr">
-<meta property="og:image" content="http://yoursite.com/2017/07/20/AbstractQueuedSynchronizer-2/aqs2-1.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/20/AbstractQueuedSynchronizer-2/aqs2-2.png">
-<meta property="og:updated_time" content="2017-07-26T02:54:39.000Z">
+<meta property="og:image" content="http://yoursite.com/blogimages/AbstractQueuedSynchronizer-2/aqs2-1.png">
+<meta property="og:image" content="http://yoursite.com/blogimages/AbstractQueuedSynchronizer-2/aqs2-2.png">
+<meta property="og:updated_time" content="2017-10-25T09:26:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一行一行源码分析清楚 AbstractQueuedSynchronizer (二)">
 <meta name="twitter:description" content="文章比较长，信息量比较大，建议在 pc 上阅读。文章标题是为了呼应前文，其实可以单独成文的，主要是希望读者看文章能系统看。写到后面，我都想给这篇文章取几个唬人的标题了，差点变成标题党，如：  深入理解 ReentrantLock 公平锁和非公平锁的区别 深入分析 AbstractQueuedSynchronizer 中的 ConditionObject 深入理解 java 线程中断和 Interr">
-<meta name="twitter:image" content="http://yoursite.com/2017/07/20/AbstractQueuedSynchronizer-2/aqs2-1.png">
+<meta name="twitter:image" content="http://yoursite.com/blogimages/AbstractQueuedSynchronizer-2/aqs2-1.png">
 
 
 
@@ -384,7 +384,7 @@
 </ol>
 <p>基本上本文把以上几点都说清楚了，我假设读者看过<a href="http://hongjiev.github.io/2017/06/16/AbstractQueuedSynchronizer/" target="_blank" rel="external">上一篇文章中对 AbstractQueuedSynchronizer 的介绍 </a>，当然如果你已经熟悉 AQS 中的独占锁了，那也可以直接看这篇。各小节之间基本上没什么关系，大家可以只关注自己感兴趣的部分。</p>
 <p>我想实现的目标：希望大家想看 java.util.concurrent.lock 源码分析的时候，直接看我的这两篇文章就可以了。所以，我可能还需要写第三篇文章，把共享模式详细分析下，然后介绍这个包剩余的几个类，同时把不在这个包里面的 CountDownLatch、CyclicBarrier、Semaphore 等相关的类串讲一下。远期目标是把 concurrent 包中的所有类都介绍完，如果确定了不会实现这个目标，我会偷偷把这句话删除的😂。</p>
-<p><img src="/2017/07/20/AbstractQueuedSynchronizer-2/aqs2-1.png" alt="aqs2-1"></p>
+<p><img src="/blogimages/AbstractQueuedSynchronizer-2/aqs2-1.png" alt="aqs2-1"></p>
 <a id="more"></a>
 <!-- toc -->
 <ul>
@@ -438,7 +438,7 @@
 <blockquote>
 <p>这里的阻塞队列如果叫做同步队列（sync queue）其实比较贴切，不过为了和前篇呼应，我就继续使用阻塞队列了。记住这里的两个概念，<strong>阻塞队列</strong>和<strong>条件队列</strong>。</p>
 </blockquote>
-<p><img src="/2017/07/20/AbstractQueuedSynchronizer-2/aqs2-2.png" alt="condition-2"></p>
+<p><img src="/blogimages/AbstractQueuedSynchronizer-2/aqs2-2.png" alt="condition-2"></p>
 <blockquote>
 <p>这里，我们简单回顾下 Node 的属性：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">volatile</span> <span class="keyword">int</span> waitStatus; <span class="comment">// 可取值CANCELLED(1)、SIGNAL(-1)、CONDITION(-2)、PROPAGATE(-3)</span></div><div class="line"><span class="keyword">volatile</span> Node prev;</div><div class="line"><span class="keyword">volatile</span> Node next;</div><div class="line"><span class="keyword">volatile</span> Thread thread;</div><div class="line">Node nextWaiter;</div></pre></td></tr></table></figure></p>
 <p>prev 和 next 用于实现阻塞队列的双向链表，nextWaiter 用于实现条件队列的单向链表</p>
@@ -734,7 +734,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -745,7 +745,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>

@@ -277,6 +277,217 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/06/cross-domain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hong Jie">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Java熊">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/06/cross-domain/" itemprop="url">搞定所有跨域需求</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-06T00:00:00+08:00">
+                2017-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/best-practice/" itemprop="url" rel="index">
+                    <span itemprop="name">best-practice</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/06/cross-domain/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/06/cross-domain/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>网上各种跨域教程，各种实践，各种问答，除了简单的 jsonp 以外，很多说 CORS 的都是行不通的，老是缺那么一两个关键的配置。本文只想解决问题，所有的代码经过亲自实践。</p>
+<p>本文解决跨域中的 get、post、data、cookie 等这些问题。</p>
+<p>本文只会说 get 请求和 post 请求，读者请把 post 请求理解成除 get 请求外的所有其他请求方式。</p>
+<p><a href="#jsonp">JSONP</a></p>
+<ul>
+<li><a href="#jsonp-jquery">前端 jQuery 写法</a></li>
+<li><a href="#jsonp-spring">后端 SpringMVC 配置</a></li>
+<li><a href="#jsonp-non-spring">后端非 SpringMVC 配置</a></li>
+</ul>
+<p><a href="#cors">CORS</a></p>
+<ul>
+<li><a href="#cors-jquery">前端 jQuery 写法</a></li>
+<li><a href="#cors-spring">后端 SpringMVC 配置</a></li>
+<li><a href="#cors-non-jquery">前端非 jQuery 写法</a></li>
+</ul>
+<p><div id="jsonp"></div></p>
+<h2 id="jsonp"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h2><p>jsonp 的原理很简单，利用了【前端请求静态资源的时候不存在跨域问题】这个思路。</p>
+<p>但是 <strong>只支持 get，只支持 get，只支持 get</strong>。</p>
+<p>注意一点，既然这个方法叫 jsonp，后端数据一定要使用 json 数据，不能随便的搞个字符串什么的，不然你会觉得结果莫名其妙的。</p>
+<p><div id="jsonp-jquery"></div></p>
+<h3 id="前端-jquery-写法"><a href="#前端-jQuery-写法" class="headerlink" title="前端 jQuery 写法"></a>前端 jQuery 写法</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line">  <span class="attr">type</span>: <span class="string">"get"</span>,</div><div class="line">  <span class="attr">url</span>: baseUrl + <span class="string">"/jsonp/get"</span>,</div><div class="line">  <span class="attr">dataType</span>: <span class="string">"jsonp"</span>,</div><div class="line">  <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</div><div class="line">    $(<span class="string">"#response"</span>).val(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<blockquote>
+<p>dataType: “jsonp”。除了这个，其他配置和普通的请求是一样的。</p>
+</blockquote>
+<p><div id="jsonp-spring"></div></p>
+<h3 id="后端-springmvc-配置"><a href="#后端-SpringMVC-配置" class="headerlink" title="后端 SpringMVC 配置"></a>后端 SpringMVC 配置</h3><p>如果你也使用 SpringMVC，那么配置一个 jsonp 的 Advice 就可以了，这样我们写的每一个 Controller 方法就完全不需要考虑客户端到底是不是 jsonp 请求了，Spring 会自动做相应的处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ControllerAdvice</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsonpAdvice</span> <span class="keyword">extends</span> <span class="title">AbstractJsonpResponseBodyAdvice</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">JsonpAdvice</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="comment">// 这样如果请求中带 callback 参数，Spring 就知道这个是 jsonp 的请求了</span></div><div class="line">		<span class="keyword">super</span>(<span class="string">"callback"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><em>以上写法要求 <strong>SpringMVC 版本不低于 3.2</strong>，低于 3.2 的我只能说，你们该升级了。</em></p>
+<p><div id="jsonp-non-spring"></div></p>
+<h3 id="后端非-springmvc-配置"><a href="#后端非-SpringMVC-配置" class="headerlink" title="后端非 SpringMVC 配置"></a>后端非 SpringMVC 配置</h3><p>以前刚工作的时候，Struts2 还红遍天，几年的光景，SpringMVC 就基本统治下来了国内市场。</p>
+<p>偷懒一下，这里贴个伪代码吧，在我们的方法返回前端之前调一下 wrap 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">wrap</span><span class="params">(HttpServletRequest request)</span></span>&#123;</div><div class="line">	String callback = request.getParameter(<span class="string">"callback"</span>);</div><div class="line">	<span class="keyword">if</span>(StringUtils.isBlank(callback))&#123;</div><div class="line">		<span class="keyword">return</span> result;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">return</span> callback+<span class="string">"("</span>+JSON.toJSONString(result)+<span class="string">")"</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><div id="cors"></div></p>
+<h2 id="cors"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h2><p>毕竟 jsonp 只支持 get 请求，肯定不能满足我们的所有的请求需要，所以才需要搬出 CORS。</p>
+<p>国内的 web 开发者还是比较苦逼的，用户死不升级浏览器，老板还死要开发者做兼容。</p>
+<p>CORS 支持以下浏览器，目前来看，浏览器的问题已经越来越不重要了，连淘宝都不支持 IE7 了~~~</p>
+<ul>
+<li>Chrome 3+</li>
+<li>Firefox 3.5+</li>
+<li>Opera 12+</li>
+<li>Safari 4+</li>
+<li>Internet Explorer 8+</li>
+</ul>
+<p><div id="cors-jquery"></div></p>
+<h3 id="前端-jquery-写法"><a href="#前端-jQuery-写法-1" class="headerlink" title="前端 jQuery 写法"></a>前端 jQuery 写法</h3><p>直接看代码吧：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line">    <span class="attr">type</span>: <span class="string">"POST"</span>,</div><div class="line">    <span class="attr">url</span>: baseUrl + <span class="string">"/jsonp/post"</span>,</div><div class="line">    <span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">    <span class="attr">crossDomain</span>: <span class="literal">true</span>,</div><div class="line">    <span class="attr">xhrFields</span>: &#123;</div><div class="line">        <span class="attr">withCredentials</span>: <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">data</span>: &#123;</div><div class="line">        <span class="attr">name</span>: <span class="string">"name_from_frontend"</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(response)<span class="comment">// 返回的 json 数据</span></div><div class="line">        $(<span class="string">"#response"</span>).val(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<blockquote>
+<p>dataType: “json”，这里是 json，不是 jsonp，不是 jsonp，不是 jsonp。</p>
+<p>crossDomain: true，这里代表使用跨域请求</p>
+<p>xhrFields: {withCredentials: true}，这样配置就可以把 cookie 带过去了，不然我们连 session 都没法维护，很多人都栽在这里。当然，如果你没有这个需求，也就不需要配置这个了。</p>
+</blockquote>
+<p><div id="cors-spring"></div></p>
+<h3 id="后端-springmvc-配置"><a href="#后端-SpringMVC-配置-1" class="headerlink" title="后端 SpringMVC 配置"></a>后端 SpringMVC 配置</h3><p>对于大部分的 web 项目，一般都会有 mvc 相关的配置类，此类继承自 WebMvcConfigurerAdapter。如果你也使用 SpringMVC 4.2 以上的版本的话，直接像下面这样添加这个方法就可以了：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Configuration</div><div class="line">public class WebConfig extends WebMvcConfigurerAdapter &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void addCorsMappings(CorsRegistry registry) &#123;</div><div class="line">        registry.addMapping("/**/*").allowedOrigins("*");</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果很不幸你的项目中 SpringMVC 版本低于 4.2，那么需要「曲线救国」一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CrossDomainFilter</span> <span class="keyword">extends</span> <span class="title">OncePerRequestFilter</span> </span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doFilterInternal</span><span class="params">(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</div><div class="line">        response.addHeader(<span class="string">"Access-Control-Allow-Origin"</span>, <span class="string">"*"</span>);</div><div class="line">        response.addHeader(<span class="string">"Access-Control-Allow-Methods"</span>, <span class="string">"GET, POST, PUT, DELETE"</span>);</div><div class="line">        response.addHeader(<span class="string">"Access-Control-Allow-Headers"</span>, <span class="string">"Content-Type"</span>);</div><div class="line">        filterChain.doFilter(request, response);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在 web.xml 中配置下 filter：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">filter</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>CrossDomainFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>com.zhongan.venus.web.filters.CrossDomainFilter<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">filter</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>CrossDomainFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>有很多项目用 shiro 的，也可以通过配置 shiro 过滤器的方式，这里就不介绍了。</p>
+<p>注意了，我说的是很笼统的配置，对于大部分项目是可以这么笼统地配置的。文中类似 “*” 这种配置读者应该都能知道怎么配。</p>
+<p><div id="cors-non-jquery"></div></p>
+<h3 id="前端非-jquery-写法"><a href="#前端非-jQuery-写法" class="headerlink" title="前端非 jQuery 写法"></a>前端非 jQuery 写法</h3><p>jQuery 一招鲜吃遍天的日子是彻底不在了，这里就说说如果不使用 jQuery 的话，怎么解决 post 跨域的问题。</p>
+<p>来一段原生 js 介绍下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createCORSRequest</span>(<span class="params">method, url</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">    <span class="keyword">if</span> (<span class="string">"withCredentials"</span> <span class="keyword">in</span> xhr) &#123;</div><div class="line">        <span class="comment">// 如果有 withCredentials 这个属性，那么可以肯定是 XMLHTTPRequest2 对象。看第三个参数</span></div><div class="line">        xhr.open(method, url, <span class="literal">true</span>);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> XDomainRequest != <span class="string">"undefined"</span>) &#123;</div><div class="line">        <span class="comment">// 此对象是 IE 用来跨域请求的</span></div><div class="line">        xhr = <span class="keyword">new</span> XDomainRequest();</div><div class="line">        xhr.open(method, url);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// 如果是这样，很不幸，浏览器不支持 CORS</span></div><div class="line">        xhr = <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> xhr;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> xhr = createCORSRequest(<span class="string">'GET'</span>, url);</div><div class="line"><span class="keyword">if</span> (!xhr) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'CORS not supported'</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中，Chrome，Firefox，Opera，Safari 这些「程序员友好」的浏览器使用的是 XMLHTTPRequest2 对象。IE 使用的是 XDomainRequest。</p>
+<p>我想，对于 95% 的读者来说，说到这里就够了，我就不往下说了，读者如果有需要补充的，请在评论区留言。</p>
+<p>（全文完）</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/12/design-pattern/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -998,7 +1209,7 @@
 </ol>
 <p>基本上本文把以上几点都说清楚了，我假设读者看过<a href="http://hongjiev.github.io/2017/06/16/AbstractQueuedSynchronizer/" target="_blank" rel="external">上一篇文章中对 AbstractQueuedSynchronizer 的介绍 </a>，当然如果你已经熟悉 AQS 中的独占锁了，那也可以直接看这篇。各小节之间基本上没什么关系，大家可以只关注自己感兴趣的部分。</p>
 <p>我想实现的目标：希望大家想看 java.util.concurrent.lock 源码分析的时候，直接看我的这两篇文章就可以了。所以，我可能还需要写第三篇文章，把共享模式详细分析下，然后介绍这个包剩余的几个类，同时把不在这个包里面的 CountDownLatch、CyclicBarrier、Semaphore 等相关的类串讲一下。远期目标是把 concurrent 包中的所有类都介绍完，如果确定了不会实现这个目标，我会偷偷把这句话删除的😂。</p>
-<p><img src="/2017/07/20/AbstractQueuedSynchronizer-2/aqs2-1.png" alt="aqs2-1"></p>
+<p><img src="/blogimages/AbstractQueuedSynchronizer-2/aqs2-1.png" alt="aqs2-1"></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/07/20/AbstractQueuedSynchronizer-2/#more" rel="contents">
@@ -1391,7 +1602,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1402,7 +1613,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
